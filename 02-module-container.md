@@ -21,7 +21,7 @@ We currently don't have a clear definition. Instead we want to guide with a set 
 A module container consists of the following properties:
 
 1. [Proper Linux process](#1-proper-linux-process)
-2. Explicit interfaces
+2. [Explicit interfaces](#2-explicit-interfaces)
 3. Disposable
 4. Immutable
 5. Self-Contained
@@ -101,14 +101,80 @@ Tips / Further reading:
 
 ### 2. Explicit interfaces
 
+TODO better intro
+
+A good module has an explicit interface. We have touched on those in [Proper Linux process](#1-proper-linux-process) and want to further expand what is possible for containers.
+
+**Handle Arguments**
+
+TODO / TBD:  
+
+* should this be moved to linux process?
+* why do we describe this an not HTTP APIs?
+* idea: move this up since it is "linux process.
+
+Arguments are a straight forward way to configure and send options to a container. We propose that you should handle these in a comprehensible way.
+
+Luckily CLI arguments are a very old topic so we refer to existing standards and libraries:
+
+* [POSIX.1-2008 Utility conventions](http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html)
+* In conjunction with [getopt](http://pubs.opengroup.org/onlinepubs/9699919799/functions/getopt.html) as utility to parse / validate.
+* Libcs [Program Argument Syntax Conventions](http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html)
+
+
+**Use Environment Variables**
+
+In addition or as an alternative to command line arguments we can use environment variables to inject information into our container. Especially for configuration this has been made popular by the 12 Factor App: [III. Config Store config in the environment](Store config in the environment)
+
+A common best practice is to set the [defaults envs](https://docs.docker.com/engine/reference/builder/#env) in the image and let the user overwrite it [](https://docs.docker.com/engine/reference/run/#env-environment-variables). See the section with labels below as an idea how to document these. 
+
+**Declare Available Ports**
+
+Another interface are the network ports our container potentially listens on. With the [EXPOSE](https://docs.docker.com/engine/reference/builder/#expose) directive. The ports will then show up in `docker ps` and `docker inspect`. And they can be [enforced](https://docs.docker.com/engine/userguide/networking/default_network/container-communication/#communication-between-containers) with setting `ipables=true` && `icc=false`.
+
+**Mounts?**
+
 TODO
 
-Builds upon 1. Proper Linux Process
-What can we do more? 
-  * Hooks
-  * Labels
-  * 
-Unix args http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html
+**Document With Labels**
+
+
+
+```json
+{
+  "key": "OPENWEATHERMAP_APIKEY",
+  "description": "APIKEY to access the OpenWeatherMap. Get one at tp://openweathermap.org/appid",
+  "mandatory": true
+}
+```
+https://github.com/luebken/currentweather/blob/master/Dockerfile#L13
+
+$ docker inspect -f "{{json .Config.Labels }}" <container image>
+https://github.com/luebken/currentweather/blob/master/Makefile#L9
+
+
+
+* https://github.com/progrium/entrykit
+
+https://docs.docker.com/engine/userguide/labels-custom-metadata/
+https://github.com/projectatomic/ContainerApplicationGenericLabels
+https://github.com/garethr/docker-label-inspector
+https://www.youtube.com/watch?v=j4SZ1qoR8Hs
+https://speakerdeck.com/garethr/shipping-manifests-bill-of-lading-and-docker-metadata-and-container
+
+Feature request: https://github.com/docker/docker/issues/20360
+add label in one statement
+access labels via inspect
+
+**Use Hooks**
+
+
+
+**Further reading / Related issues:**
+
+* 
+
+
 
 ### 3. Disposable
 ### 4. Immutable
