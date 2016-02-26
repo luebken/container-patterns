@@ -1,36 +1,47 @@
+# WIP !!!
+
+Please note this document lives in a [WIP PR](https://github.com/luebken/container-patterns/pull/1).
+
 # Module container
 
-TODO write something about platform agnostic with special care about docker
+Developing container based applications is still a fairly new topic. This document tries to gather some best practices and suggests some new ideas from the community. These should be container runtime agnostic but still practical relevant with concrete examples. 
 
-## Description
+> Note: Many of these ideas are formalised in the [Open Containers Spec](https://github.com/opencontainers/specs) but we want to give guidance for todays tool chain.
+
+> Note: This document is highly Work-In-Progress. Please get involved. Comment discuss and add your own ideas.  
+
+## Definition
 
 The term "module container" builds upon "application container" coined by Docker. An application container focuses on running a single process in contrast to multiple processes per container. If the application consists of multiple processes they are spread out to different containers. A module container refines application container with the focuses on being a good building block. In addition it suggests an even smaller granularity.
 
 ## Related work
 
-TODO
+In this field there is much prior and contemporary art.
 
-* cluster aware images
-* cloud native
-* 12factor apps
+* [The 12 Factor App](http://12factor.net/) a widely cited site describing how to write good PaaS applications. Initiated by Heroku. Many of these principles apply for containers as well.
 
-## Definition
+* Cloud native: In the past year the term "cloud native applications" has gained popularity. A good introduction can be found in the free ebook [Migrating to Cloud Native Application Architectures](http://pivotal.io/platform/migrating-to-cloud-native-application-architectures-ebook)
 
-We currently don't have a clear definition. Instead we want to guide with a set of properties and associated best practices.
+[//]: # (TODO include cluster aware images once a post is up)
 
-A module container consists of the following properties:
+
+## Properties of a module container
+
+There is no clear definition of a "module container". Instead we gathered  a set of guiding properties and associated best practices:
 
 1. [Proper Linux process](#1-proper-linux-process)
-2. [Explicit interfaces](#2-explicit-interfaces)
-3. Disposable
-4. Immutable
-5. Self-Contained
-6. Small
+2. [Container API](#2-container-api)
+3. [Explicit interfaces](#3-explicit-interfaces)
+4. Disposable
+5. Immutable
+6. Self-Contained
+7. Small
 
 ### 1. Proper Linux process
-We should acknowledge the fact that a container is foremost a Linux process (isolated by namespaces and controlled by cgroups). Therefor we should apply common standards and best practices for writing Unix tools.
 
-#### a) React to signals
+Before we come up with to many new ideas we should acknowledge the fact that a container is foremost a Linux process. Therefor we should apply common standards and best practices for writing Unix tools which happen to be containers.
+
+#### React to signals
 A container should react to [signals](https://en.wikipedia.org/wiki/Unix_signal) which are being send to it. This starts with that we don't daemonize our process and keep it in the foreground. We catch signals in the program and react appropriate. 
 
 **Use the exec form**:  
@@ -63,7 +74,7 @@ https://github.com/luebken/currentweather/blob/master/server.js#L47
 * [Signal handlers must be reentrant](http://blog.rubybestpractices.com/posts/ewong/016-Implementing-Signal-Handlers.html#fn1) What happens when another signal arrives while this handler is still running?
 * [Self pipe trick](http://cr.yp.to/docs/selfpipe.html) Maintain a pipe for signals. 
 
-#### b) Return proper exit codes
+#### Return proper exit codes
 We should return proper exit codes when exiting the container. This gives us a better overview of what happened and the scheduler / init process better means of scheduling. E.g. in Kubernetes you can define that only failed containers [should be restarted](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/pod-states.md#restartpolicy).
 
 We generally just differ between the exit code `0` as a successful termination and something `>0` as a failure. But other exit codes are conceivable. Some inspiration might give [glibc](https://github.molgen.mpg.de/git-mirror/glibc/blob/master/misc/sysexits.h) or [bash](http://tldp.org/LDP/abs/html/exitcodes.html).
@@ -78,7 +89,7 @@ https://github.com/luebken/currentweather/blob/master/server.js#L50
 
 [//]: # (TODO better example with exit code 1)
 
-#### c) Use standard streams
+#### Use standard streams
 
 Linux processes use standard streams as a means of communication. There are `stdin`: standard input, `stdout`: standard output and `stderr` standard error:
 
@@ -99,19 +110,7 @@ Tips / Further reading:
 
 * In 12 factor apps: [Treat logs as event streams](http://12factor.net/logs).
 
-### 2. Explicit interfaces
-
-TODO better intro
-
-A good module has an explicit interface. We have touched on those in [Proper Linux process](#1-proper-linux-process) and want to further expand what is possible for containers.
-
-**Handle Arguments**
-
-TODO / TBD:  
-
-* should this be moved to linux process?
-* why do we describe this an not HTTP APIs?
-* idea: move this up since it is "linux process.
+#### Handle Arguments
 
 Arguments are a straight forward way to configure and send options to a container. We propose that you should handle these in a comprehensible way.
 
@@ -122,23 +121,55 @@ Luckily CLI arguments are a very old topic so we refer to existing standards and
 * Libcs [Program Argument Syntax Conventions](http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html)
 
 
-**Use Environment Variables**
+### 2. Container API
+
+Although our container is foremost a Linux process it is also contained in it's own environment. This gives our "module container" more capabilities in defining APIs to it's environment and clients.
+
+#### Use Environment Variables
 
 In addition or as an alternative to command line arguments we can use environment variables to inject information into our container. Especially for configuration this has been made popular by the 12 Factor App: [III. Config Store config in the environment](Store config in the environment)
 
 A common best practice is to set the [defaults envs](https://docs.docker.com/engine/reference/builder/#env) in the image and let the user overwrite it [](https://docs.docker.com/engine/reference/run/#env-environment-variables). See the section with labels below as an idea how to document these. 
 
-**Declare Available Ports**
+#### Declare Available Ports
 
 Another interface are the network ports our container potentially listens on. With the [EXPOSE](https://docs.docker.com/engine/reference/builder/#expose) directive. The ports will then show up in `docker ps` and `docker inspect`. And they can be [enforced](https://docs.docker.com/engine/userguide/networking/default_network/container-communication/#communication-between-containers) with setting `ipables=true` && `icc=false`.
 
-**Mounts?**
+#### Volume mounts
 
-TODO
-
-**Document With Labels**
+In Docker you can define volumes when starting the container or when defining the image. We advise to declare volumes in the image so it can be examined before hand.
 
 
+#### Hooks
+
+Sometimes a container needs to react to different events during it's life time. Before termination we can check for the termination signal but that is limited since no context information can be given. In addition we might want to react to more events like something like an event post startup.
+
+A good example are [container hooks in Kubernetes](http://kubernetes.io/v1.1/docs/user-guide/container-environment.html#container-hooks). Another  example are the [hooks in the opencontainer spec](https://github.com/opencontainers/specs/blob/master/config.md#hooks). 
+
+Docker currently doesn't natively support hooks but there is a proposal about adding them: [#6982](https://github.com/docker/docker/issues/6982).
+
+Docker does submit [events](https://docs.docker.com/engine/reference/commandline/events/) which can be leveraged to implement non-blocking hooks. Jeff Lindsay happened to implement exactly this with [dockerhook](https://github.com/progrium/dockerhook).		
+
+[//]: # (TODO write a proposal for adding this as a label)
+[//]: # (TODO look at native docker plugins )
+[//]: # (TODO maybe add https://github.com/progrium/entrykit#prehook---run-pre-commands-on-start )
+
+
+### 3. Explicit interfaces
+
+A good module has an explicit or as wikipedia says [well defined](https://en.wikipedia.org/wiki/Modular_programming#Key_aspects) interface. With all the ways of creating an API for our container we also need a way to expose this. Which is what we do with the EXPOSE or the VOLUME declaration. We want to expand on that and use Labels to document more of our API.
+
+
+#### Document With Labels
+
+Docker has the ability to add arbitrary metadata to images via [labels](https://docs.docker.com/engine/userguide/labels-custom-metadata/) which can be even [JSON](https://docs.docker.com/engine/userguide/labels-custom-metadata/#store-structured-data-in-labels).
+
+Gareth Rushgrove is evangelizing the idea of creating standards on this data and creating ["shipping manifests"](https://speakerdeck.com/garethr/shipping-manifests-bill-of-lading-and-docker-metadata-and-container
+). He has even written a tool that validates the schema of this data: [docker-label-inspector](https://github.com/garethr/docker-label-inspector). See his Dockercon [presentation](https://www.youtube.com/watch?v=j4SZ1qoR8Hs) and [slides](https://speakerdeck.com/garethr/shipping-manifests-bill-of-lading-and-docker-metadata-and-container) for details.
+
+There is also an initiative on [standard labels](https://github.com/projectatomic/ContainerApplicationGenericLabels).
+
+As an example we want to document an environment variable that our container needs:
 
 ```json
 {
@@ -149,34 +180,25 @@ TODO
 ```
 https://github.com/luebken/currentweather/blob/master/Dockerfile#L13
 
+To inspect the labels use:
+
+```
 $ docker inspect -f "{{json .Config.Labels }}" <container image>
+```
 https://github.com/luebken/currentweather/blob/master/Makefile#L9
 
+#### View the API contract of a module container
 
+https://github.com/luebken/container-api
 
-* https://github.com/progrium/entrykit
+[//]: # (TODO comment on Feature request: https://github.com/docker/docker/issues/20360
+)
 
-https://docs.docker.com/engine/userguide/labels-custom-metadata/
-https://github.com/projectatomic/ContainerApplicationGenericLabels
-https://github.com/garethr/docker-label-inspector
-https://www.youtube.com/watch?v=j4SZ1qoR8Hs
-https://speakerdeck.com/garethr/shipping-manifests-bill-of-lading-and-docker-metadata-and-container
-
-Feature request: https://github.com/docker/docker/issues/20360
-add label in one statement
-access labels via inspect
-
-**Use Hooks**
-
-
-
-**Further reading / Related issues:**
-
-* 
-
-
-
-### 3. Disposable
-### 4. Immutable
-### 5. Self-Contained
-### 6. Small
+### 4. Disposable
+TODO
+### 5. Immutable
+TODO
+### 6. Self-Contained
+TODO
+### 7. Small
+TODO
