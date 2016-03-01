@@ -252,6 +252,14 @@ The container should only rely on the Linux kernel. All other dependencies shoul
 ### 7. Small
 A container should have the least amount of code possible to fulfil its job. The smaller, the less dependencies, the less interference. Easier to redristibute. Better bug hunting, auditing. Smaller interface generally means better security.
 
+Alpine is a minimalist linux distribution based on busybox, musl-libc, a new package manager called apk (not the Android one) and OpenRC as init system. [Some Thoughts on the Use of Alpine Linux in Docker Images](http://www.skippbox.com/thoughts-on-the-use-of-alpine-linux-in-docker-images/).
+
+
+See image building guidelines like:
+
+* [Open Shift Guideline](https://docs.openshift.org/latest/creating_images/guidelines.html) 
+* [Docker best practices for writing Dockerfiles](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/)
+* [Project Atomic Guidance for Docker Image Authors](http://www.projectatomic.io/docs/docker-image-author-guidance/)
 
 #### Best practices
 * Build from scratch 
