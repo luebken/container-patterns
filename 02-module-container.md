@@ -236,11 +236,12 @@ The container should only rely on the Linux kernel. All other dependencies shoul
 * Zero-config deployment. Use sensible defaults.
 * Generate dynamic config files on the fly.
 
-[//]: # (TODO find good example)
+[//]: # (TODO find good example for dynamic config files)
 [//]: # (TODO https://github.com/markround/tiller)
 [//]: # (TODO https://github.com/kelseyhightower/confd)
 [//]: # (TODO https://github.com/joyent/containerbuddy)
 [//]: # (TODO https://github.com/progrium/entrykit#render---template-rendering)
+[//]: # (TODO https://medium.com/@kelseyhightower/12-fractured-apps-1080c73d481c#.g3ydhs5zw)
 
 #### Best practices
 * Anti-Patterns: 
