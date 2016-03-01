@@ -210,17 +210,52 @@ This concept widely accepted in the container space that developers use the `--r
 
 #### Best practices
 
-* Only keep ephemeral state. 
 * Be robust against sudden death.  
   If the container gets interrupted pass on your current job. (See ["React to signals"](#react-to-signals))
 * Minimal setup  
   If more setup needed let the scheduler know and use [hooks](#hooks).
 
 ### 5. Immutable
-TODO
 
+Once a container image is built it shouldn’t be changed. State should be extracted and changes to the container should be applied by rebuilding the container.
+
+#### Best practices
+* Have a [dev / prod parity](http://12factor.net/dev-prod-parity) with the container image
+* Externalize configuration with defaults in the image
+[//]: # (TODO move down?)
+* Extract runtime state in volumes
+* Anti-pattern to go into the container and change configuration. Risk of a [SnowflakeServer](http://martinfowler.com/bliki/SnowflakeServer.html)
+* Create a final file layout on build
 
 ### 6. Self-Contained
-TODO
+The container should only rely on the Linux kernel. All other dependencies should be made explicit and added dynamically.
+
+#### Best practices
+* Add dependencies at build time
+  * E.g. Build Uber-Jar and include webserver
+* Zero-config deployment. Use sensible defaults.
+* Generate dynamic config files on the fly.
+
+[//]: # (TODO find good example)
+[//]: # (TODO https://github.com/markround/tiller)
+[//]: # (TODO https://github.com/kelseyhightower/confd)
+[//]: # (TODO https://github.com/joyent/containerbuddy)
+[//]: # (TODO https://github.com/progrium/entrykit#render---template-rendering)
+
+#### Best practices
+* Anti-Patterns: 
+  * Put config into a volume
+  * Put code into a volume.  
+    The exception might be a development environment.
+
+
 ### 7. Small
-TODO
+A container should have the least amount of code possible to fulfil its job. The smaller, the less dependencies, the less interference. Better bug hunting, auditing. Smaller interface generally means better security.
+
+
+#### Best practices
+* Build from scratch 
+* Use small base-image
+  alpine is the shiny new kid in town
+* Reuse custom base image
+Anti-Pattern: VM Container
