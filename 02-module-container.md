@@ -32,10 +32,10 @@ There is no clear definition of a "module container". Instead we gathered  a set
 1. [Proper Linux process](#1-proper-linux-process)
 2. [Container API](#2-container-api)
 3. [Explicit interfaces](#3-explicit-interfaces)
-4. Disposable
-5. Immutable
-6. Self-Contained
-7. Small
+4. [Disposable](#4-disposable)
+5. [Immutable](#5-immutable)
+6. [Self-Contained](#6-self-contained)
+7. [Small](#small)
 
 ### 1. Proper Linux process
 
@@ -217,7 +217,7 @@ This concept widely accepted in the container space that developers use the `--r
 
 ### 5. Immutable
 
-Once a container image is built it shouldn’t be changed. State should be extracted and changes to the container should be applied by rebuilding the container.
+The container image contains the OS, libraries, configurations, files and application code. Once a container image is built it shouldn’t be changed especially not between different staging environtments like dev, qa and production. State should be extracted and changes to the container should be applied by rebuilding the container.
 
 #### Best practices
 * Have a [dev / prod parity](http://12factor.net/dev-prod-parity) with the container image
@@ -250,7 +250,7 @@ The container should only rely on the Linux kernel. All other dependencies shoul
 
 
 ### 7. Small
-A container should have the least amount of code possible to fulfil its job. The smaller, the less dependencies, the less interference. Better bug hunting, auditing. Smaller interface generally means better security.
+A container should have the least amount of code possible to fulfil its job. The smaller, the less dependencies, the less interference. Easier to redristibute. Better bug hunting, auditing. Smaller interface generally means better security.
 
 
 #### Best practices
