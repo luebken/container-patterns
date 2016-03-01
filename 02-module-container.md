@@ -1,6 +1,6 @@
 # WIP !!!
 
-Please note this document lives in a [WIP PR](https://github.com/luebken/container-patterns/pull/1).
+Please note this document lives in a [WIP PR](https://github.com/luebken/container-patterns/pull/1)
 
 # Module container
 
@@ -191,13 +191,35 @@ https://github.com/luebken/currentweather/blob/master/Makefile#L9
 
 https://github.com/luebken/container-api
 
-[//]: # (TODO comment on Feature request: https://github.com/docker/docker/issues/20360
-)
+[//]: # (TODO comment on Feature request: https://github.com/docker/docker/issues/20360)
 
 ### 4. Disposable
-TODO
+
+The [Pets vs Cattle](https://blog.engineyard.com/2014/pets-vs-cattle) is the infamous article about an analogy which differ two different server types. There are pets which you give names and want to hold on and catles which you give numbers and can be exchanged easily.
+
+A module container should always strive for being exchanged with a copy at any point of time. This especially true in an cluster environment where there can be many reasons for a particular container be stopped:
+ 
+ * Rescheduling because of limit or bad resources
+ * Down-scaling
+ * Errors within the container
+ * Migration to new hardware / locality of services
+
+This concept widely accepted in the container space that developers use the `--rm` with Docker as a default which always remove the container after they have stopped. We have http://12factor.net/disposabilitychosen the term "disposable" from the [12Factor app](http://12factor.net/disposability).
+
+[//]: # (Most argued property so far. Would need to put some  Ops perspective on this.) 
+
+#### Best practices
+
+* Only keep ephemeral state. 
+* Be robust against sudden death.  
+  If the container gets interrupted pass on your current job. (See ["React to signals"](#react-to-signals))
+* Minimal setup  
+  If more setup needed let the scheduler know and use [hooks](#hooks).
+
 ### 5. Immutable
 TODO
+
+
 ### 6. Self-Contained
 TODO
 ### 7. Small
