@@ -26,6 +26,9 @@
   https://medium.com/@kelseyhightower/12-fractured-apps-1080c73d481c#.uazi57nw8
   How to handle configuration
 
+* 10 things to avoid in docker containers, February 24, 2016
+  http://developerblog.redhat.com/2016/02/24/10-things-to-avoid-in-docker-containers/
+
 
 ## Tools
 
