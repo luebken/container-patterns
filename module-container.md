@@ -237,8 +237,7 @@ The container image contains the OS, libraries, configurations, files and applic
 
 #### Best practices
 * Have a [dev / prod parity](http://12factor.net/dev-prod-parity) with the container image
-* Externalize configuration with defaults in the image
-[//]: # (TODO move down?)
+
 * Extract runtime state in volumes
 * Anti-pattern to go into the container and change configuration. Risk of a [SnowflakeServer](http://martinfowler.com/bliki/SnowflakeServer.html)
 * Create a final file layout on build
@@ -249,26 +248,37 @@ The container image contains the OS, libraries, configurations, files and applic
 [//]: # (TODO https://github.com/markround/tiller)
 
 ### 6. Self-Contained
-The container should only rely on the Linux kernel. All other dependencies should be made explicit and added dynamically.
+The container should only rely on the Linux kernel. All dependencies should be added at build time. E.g. Build an Uber-Jar which includes a webserver.
 
-#### Best practices
-* Add dependencies at build time
-  * E.g. Build Uber-Jar and include webserver
-* Zero-config deployment. Use sensible defaults.
-* Generate dynamic config files on the fly.
+#### Configuration
+If your container relies on configuration files generate them on the fly. For the parameters use sensible defaults so a simple zero-config deployment is possible.
 
-[//]: # (TODO find good example for dynamic config files)
-[//]: # (TODO https://github.com/markround/tiller)
-[//]: # (TODO https://github.com/kelseyhightower/confd)
-[//]: # (TODO https://github.com/joyent/containerbuddy)
-[//]: # (TODO https://github.com/progrium/entrykit#render---template-rendering)
-[//]: # (TODO https://medium.com/@kelseyhightower/12-fractured-apps-1080c73d481c#.g3ydhs5zw)
+There are several tools out there to help generate config files. E.g. [progrium/entrykit](https://github.com/progrium/entrykit#render---template-rendering) or [kelseyhightower/confd](https://github.com/kelseyhightower/confd). But also a simple shell script might do the job e.g.:
 
-#### Best practices
-* Anti-Patterns: 
-  * Put config into a volume
-  * Put code into a volume.  
-    The exception might be a development environment.
+```
+#!/bin/sh
+set -e
+datadir=${APP_DATADIR:="/var/lib/data"}
+host=${APP_HOST:="127.0.0.1"}
+port=${APP_PORT:="3306"}
+cat <<EOF > /etc/config.json
+{
+  "datadir": "${datadir}",
+  "host": "${host}",
+  "port": "${port}",
+}
+EOF
+mkdir -p ${APP_DATADIR}
+exec "/app"
+```
+Which is blatently copied from the great blogpost by Kelsey on [12 Fractured Apps](https://medium.com/@kelseyhightower/12-fractured-apps-1080c73d481c#.g3ydhs5zw).
+
+Also try to put as much as possible into the container. E.g. putting the application code into a volume should only be used for dev environments. If the container is deployed as much as possible should be in the container.
+
+
+Links:
+* Configuration of applications running in containers https://github.com/joyent/containerbuddy
+* A dynamic configuration file generation tool:  https://github.com/markround/tiller
 
 
 ### 7. Small
