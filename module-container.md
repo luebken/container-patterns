@@ -222,7 +222,7 @@ A module container should always strive for being exchanged with a copy at any p
 
 This concept widely accepted in the container space that developers use the `--rm` with Docker as a default which always remove the container after they have stopped. We have http://12factor.net/disposabilitychosen the term "disposable" from the [12Factor app](http://12factor.net/disposability).
 
-[//]: # (Most argued property so far. Would need to put some  Ops perspective on this.) 
+[//]: # (Most argued property so far. Would should put some Ops perspective on this which want to keep as much as possible in the case of a failure.) 
 
 #### Best practices
 
@@ -237,15 +237,9 @@ The container image contains the OS, libraries, configurations, files and applic
 
 #### Best practices
 * Have a [dev / prod parity](http://12factor.net/dev-prod-parity) with the container image
-
 * Extract runtime state in volumes
 * Anti-pattern to go into the container and change configuration. Risk of a [SnowflakeServer](http://martinfowler.com/bliki/SnowflakeServer.html)
 * Create a final file layout on build
-
-
-[//]: # (TODO write something about config files http://www.mricho.com/confd-and-docker-separating-config-and-code-for-containers/)
-[//]: # (TODO https://twitter.com/kelseyhightower/status/657761769570594816)
-[//]: # (TODO https://github.com/markround/tiller)
 
 ### 6. Self-Contained
 The container should only rely on the Linux kernel. All dependencies should be added at build time. E.g. Build an Uber-Jar which includes a webserver.
@@ -274,6 +268,9 @@ exec "/app"
 Which is blatently copied from the great blogpost by Kelsey on [12 Fractured Apps](https://medium.com/@kelseyhightower/12-fractured-apps-1080c73d481c#.g3ydhs5zw).
 
 Also try to put as much as possible into the container. E.g. putting the application code into a volume should only be used for dev environments. If the container is deployed as much as possible should be in the container.
+
+[//]: # (TODO write something about config files http://www.mricho.com/confd-and-docker-separating-config-and-code-for-containers/)
+[//]: # (TODO https://twitter.com/kelseyhightower/status/657761769570594816)
 
 
 Links:
