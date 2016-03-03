@@ -29,7 +29,7 @@ In this field there is much prior and contemporary art.
 
 There is no clear definition of a "module container". Instead we gathered  a set of guiding properties and associated best practices:
 
-1. [Proper Linux process](#1-proper-linux-process)
+1. [Linux process](#1-linux-process)
 2. [Container API](#2-container-api)
 3. [Explicit interfaces](#3-explicit-interfaces)
 4. [Disposable](#4-disposable)
@@ -37,7 +37,7 @@ There is no clear definition of a "module container". Instead we gathered  a set
 6. [Self-Contained](#6-self-contained)
 7. [Small](#small)
 
-### 1. Proper Linux process
+### 1. Linux process
 
 Before we come up with to many new ideas we should acknowledge the fact that a container is foremost a Linux process. Therefor we should apply common standards and best practices for writing Unix tools which happen to be containers.
 
@@ -66,7 +66,6 @@ process.on('SIGTERM', function () {
 ```
 https://github.com/luebken/currentweather/blob/master/server.js#L47
 
-
 **Further reading:**  
 
 * The [man page](http://man7.org/linux/man-pages/man7/signal.7.html) contains a good overview of signals.
@@ -74,7 +73,7 @@ https://github.com/luebken/currentweather/blob/master/server.js#L47
 * [Signal handlers must be reentrant](http://blog.rubybestpractices.com/posts/ewong/016-Implementing-Signal-Handlers.html#fn1) What happens when another signal arrives while this handler is still running?
 * [Self pipe trick](http://cr.yp.to/docs/selfpipe.html) Maintain a pipe for signals. 
 
-#### Return proper exit codes
+#### Return exit codes
 We should return proper exit codes when exiting the container. This gives us a better overview of what happened and the scheduler / init process better means of scheduling. E.g. in Kubernetes you can define that only failed containers [should be restarted](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/pod-states.md#restartpolicy).
 
 We generally just differ between the exit code `0` as a successful termination and something `>0` as a failure. But other exit codes are conceivable. Some inspiration might give [glibc](https://github.molgen.mpg.de/git-mirror/glibc/blob/master/misc/sysexits.h) or [bash](http://tldp.org/LDP/abs/html/exitcodes.html).
@@ -121,15 +120,28 @@ Luckily CLI arguments are a very old topic so we refer to existing standards and
 * Libcs [Program Argument Syntax Conventions](http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html)
 
 
-### 2. Container API
+### 2. API
 
 Although our container is foremost a Linux process it is also contained in it's own environment. This gives our "module container" more capabilities in defining APIs to it's environment and clients.
 
 #### Use Environment Variables
 
-In addition or as an alternative to command line arguments we can use environment variables to inject information into our container. Especially for configuration this has been made popular by the 12 Factor App: [III. Config Store config in the environment](Store config in the environment)
+In addition or as an alternative to command line arguments we can use environment variables to inject information into our container. Especially for configuration this has been made popular by the 12 Factor App: [III. Config Store config in the environment](Store config in the environment). They are easy to change between deploys and no dnager of checkin into a VCS.
 
 A common best practice is to set the [defaults envs](https://docs.docker.com/engine/reference/builder/#env) in the image and let the user overwrite it [](https://docs.docker.com/engine/reference/run/#env-environment-variables). See the section with labels below as an idea how to document these. 
+
+
+[//]: # (TODO compare with rkt env handling https://coreos.com/rkt/docs/latest/subcommands/run.html#influencing-environment-variables)
+
+Links: 
+  * A discussion about the usage of envs: https://gist.github.com/telent/9742059
+  * "Parameterized Docker Containers": http://blog.james-carr.org/2013/09/04/parameterized-docker-containers/
+  * A dynamic configuration file generation tool https://github.com/markround/tiller
+
+[//]: # (TODO example with https://github.com/andreasjansson/envtpl)
+
+
+[//]: # (TODO write something about secret handling)
 
 #### Declare Available Ports
 
@@ -155,9 +167,9 @@ Docker does submit [events](https://docs.docker.com/engine/reference/commandline
 [//]: # (TODO maybe add https://github.com/progrium/entrykit#prehook---run-pre-commands-on-start )
 
 
-### 3. Explicit interfaces
+### 3. Descriptive
 
-A good module has an explicit or as wikipedia says [well defined](https://en.wikipedia.org/wiki/Modular_programming#Key_aspects) interface. With all the ways of creating an API for our container we also need a way to expose this. Which is what we do with the EXPOSE or the VOLUME declaration. We want to expand on that and use Labels to document more of our API.
+A good module has an explicit or as wikipedia says [well defined](https://en.wikipedia.org/wiki/Modular_programming#Key_aspects) interface. So with all the ways of creating an API for our container we also need a way to expose this. Which is what we do with the EXPOSE or the VOLUME declaration. We want to expand on that and use Labels to document more of our API.
 
 
 #### Document With Labels
@@ -191,6 +203,10 @@ https://github.com/luebken/currentweather/blob/master/Makefile#L9
 
 https://github.com/luebken/container-api
 
+
+[//]: # (TODO think about a depends /expect label: https://github.com/docker/docker/issues/7247)
+[//]: # (TODO think about a  https://github.com/docker/docker/issues/12142)
+[//]: # (TODO think about Does this goes along: Dependency Injects / Service Locator patterns?)
 [//]: # (TODO comment on Feature request: https://github.com/docker/docker/issues/20360)
 
 ### 4. Disposable
@@ -227,6 +243,11 @@ The container image contains the OS, libraries, configurations, files and applic
 * Anti-pattern to go into the container and change configuration. Risk of a [SnowflakeServer](http://martinfowler.com/bliki/SnowflakeServer.html)
 * Create a final file layout on build
 
+
+[//]: # (TODO write something about config files http://www.mricho.com/confd-and-docker-separating-config-and-code-for-containers/)
+[//]: # (TODO https://twitter.com/kelseyhightower/status/657761769570594816)
+[//]: # (TODO https://github.com/markround/tiller)
+
 ### 6. Self-Contained
 The container should only rely on the Linux kernel. All other dependencies should be made explicit and added dynamically.
 
@@ -251,20 +272,21 @@ The container should only rely on the Linux kernel. All other dependencies shoul
 
 
 ### 7. Small
-A container should have the least amount of code possible to fulfil its job. The smaller, the less dependencies, the less interference. Easier to redristibute. Better bug hunting, auditing. Smaller interface generally means better security.
+A container should have the least amount of code / libraries as possible to fulfil its job. 
+
+Reasons for a smaller image:
+  * Faster in the network (deploy, reschedule, update)
+  * Increased I/O performance
+  * Smaller attack service. Easier to audit.
+
+Use different containers for building and running. Note many containers are based of `debian/buildessentials` which is mostly unecessary for runtime. 
+
+You don't have to use `Dockerfile`. Maybe creating a tar with something like [buildroot](https://buildroot.org/) and importing it via `docker import`. See the talk from Redbeard: [Best Practices For Containerized Environments](https://www.youtube.com/watch?v=gMpldbcMHuI).
 
 Alpine is a minimalist linux distribution based on busybox, musl-libc, a new package manager called apk (not the Android one) and OpenRC as init system. [Some Thoughts on the Use of Alpine Linux in Docker Images](http://www.skippbox.com/thoughts-on-the-use-of-alpine-linux-in-docker-images/).
-
 
 See image building guidelines like:
 
 * [Open Shift Guideline](https://docs.openshift.org/latest/creating_images/guidelines.html) 
 * [Docker best practices for writing Dockerfiles](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/)
 * [Project Atomic Guidance for Docker Image Authors](http://www.projectatomic.io/docs/docker-image-author-guidance/)
-
-#### Best practices
-* Build from scratch 
-* Use small base-image
-  alpine is the shiny new kid in town
-* Reuse custom base image
-Anti-Pattern: VM Container
