@@ -201,7 +201,32 @@ https://github.com/luebken/currentweather/blob/master/Makefile#L9
 
 #### View the API contract of a module container
 
-https://github.com/luebken/container-api
+If you take this a step futher an agree on some standard labels and schemas you could write tools that introspect the API contract of a container. e.g.
+
+
+```
+$ container-api luebken/currentweather-nodejs
+ -----------------------------------------------------------
+| Image:  luebken/currentweather-nodejs
+|-----------------------------------------------------------
+| Author:   Matthias Luebken, matthias@luebken.com
+| Size:     158 MB
+| Created:  2016-03-01 15:59
+|-----------------------------------------------------------
+| Container API:
+| * Mandatory ENVs to configure:
+|   - ENV:           OPENWEATHERMAP_APIKEY
+|   - Description:   APIKEY to access the OpenWeatherMap. Get one at http://openweathermap.org/appid
+|   - Mandatory:     true
+| * Optional ENVs to configure:
+|     - < empty >
+| * Available ports:
+|     -  1337/tcp {}
+| * Volumes:
+ -----------------------------------------------------------
+```
+
+For more info see: https://github.com/luebken/container-api
 
 
 [//]: # (TODO think about a depends /expect label: https://github.com/docker/docker/issues/7247)
