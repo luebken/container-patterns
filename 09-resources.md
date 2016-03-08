@@ -29,6 +29,9 @@
 * 10 things to avoid in docker containers, February 24, 2016
   http://developerblog.redhat.com/2016/02/24/10-things-to-avoid-in-docker-containers/
 
+* Best Practices For Containerized Environments, Redbeard Jul 31, 2015
+  https://www.youtube.com/watch?v=gMpldbcMHuI
+
 
 ## Tools
 
