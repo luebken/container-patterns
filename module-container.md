@@ -246,7 +246,9 @@ The container image contains the OS, libraries, configurations, files and applic
 * And don't go into the container and change configuration with the risk of creating a [SnowflakeServer](http://martinfowler.com/bliki/SnowflakeServer.html)
 
 ### 6. Self-Contained
-The container should only rely on the Linux kernel. All dependencies should be added at build time. E.g. Build an Uber-Jar which includes a webserver.
+The container should only rely on the Linux kernel. All dependencies should be added at build time. E.g. In the Java world build an Uber-Jar which includes a webserver.
+
+Sometimes developers put application code into a volume to cut the container build time. If you do so please do it only for yourself and include all application code once the container leaves your computer.
 
 #### Configuration
 If your container relies on configuration files generate them on the fly. For the parameters use sensible defaults so a simple zero-config deployment is possible.
@@ -269,15 +271,15 @@ EOF
 mkdir -p ${APP_DATADIR}
 exec "/app"
 ```
-Which is blatently copied from the great blogpost by Kelsey on [12 Fractured Apps](https://medium.com/@kelseyhightower/12-fractured-apps-1080c73d481c#.g3ydhs5zw).
+Which is blatantly copied from the great blogpost by Kelsey on [12 Fractured Apps](https://medium.com/@kelseyhightower/12-fractured-apps-1080c73d481c#.g3ydhs5zw).
 
-Also try to put as much as possible into the container. E.g. putting the application code into a volume should only be used for dev environments. If the container is deployed as much as possible should be in the container.
 
 [//]: # (TODO write something about config files http://www.mricho.com/confd-and-docker-separating-config-and-code-for-containers/)
 [//]: # (TODO https://twitter.com/kelseyhightower/status/657761769570594816)
 
 
 Links:
+
 * Configuration of applications running in containers https://github.com/joyent/containerbuddy
 * A dynamic configuration file generation tool:  https://github.com/markround/tiller
 
@@ -286,15 +288,16 @@ Links:
 A container should have the least amount of code / libraries as possible to fulfil its job. 
 
 Reasons for a smaller image:
+
   * Faster in the network (deploy, reschedule, update)
   * Increased I/O performance
   * Smaller attack service. Easier to audit.
 
-Use different containers for building and running. Note many containers are based of `debian/buildessentials` which is mostly unecessary for runtime. 
+Many containers are based of `debian/buildessentials` which is often unnecessary for runtime. Use different containers for building and running.
 
 You don't have to use `Dockerfile`. Maybe creating a tar with something like [buildroot](https://buildroot.org/) and importing it via `docker import`. See the talk from Redbeard: [Best Practices For Containerized Environments](https://www.youtube.com/watch?v=gMpldbcMHuI).
 
-Alpine is a minimalist linux distribution based on busybox, musl-libc, a new package manager called apk (not the Android one) and OpenRC as init system. [Some Thoughts on the Use of Alpine Linux in Docker Images](http://www.skippbox.com/thoughts-on-the-use-of-alpine-linux-in-docker-images/).
+Also have a look at Alpine. A minimalist Linux distribution based on busybox, musl-libc, a new package manager called apk (not the Android one) and OpenRC as init system. [Some Thoughts on the Use of Alpine Linux in Docker Images](http://www.skippbox.com/thoughts-on-the-use-of-alpine-linux-in-docker-images/).
 
 See image building guidelines like:
 
