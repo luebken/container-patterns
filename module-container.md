@@ -83,9 +83,7 @@ Return a non-failure exit code in Node.JS:
 ```javascript
 process.exit(0);
 ```
-https://github.com/luebken/currentweather/blob/master/server.js#L50
-
-[//]: # (TODO better example with exit code 1)
+https://github.com/luebken/currentweather/blob/master/server.js#L52
 
 #### Use standard streams
 
