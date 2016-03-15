@@ -237,13 +237,13 @@ This concept widely accepted in the container space that developers use the `--r
 
 ### 5. Immutable
 
-The container image contains the OS, libraries, configurations, files and application code. Once a container image is built it shouldn’t be changed especially not between different staging environtments like dev, qa and production. State should be extracted and changes to the container should be applied by rebuilding the container.
+The container image contains the OS, libraries, configurations, files and application code. Once a container image is built it shouldn’t be changed especially not between different staging environments like dev, qa and production. State should be extracted and changes to the container should be applied by rebuilding the container.
 
 #### Best practices
 * Have a [dev / prod parity](http://12factor.net/dev-prod-parity) with the container image
 * Extract runtime state in volumes
-* Anti-pattern to go into the container and change configuration. Risk of a [SnowflakeServer](http://martinfowler.com/bliki/SnowflakeServer.html)
 * Create a final file layout on build
+* And don't go into the container and change configuration with the risk of creating a [SnowflakeServer](http://martinfowler.com/bliki/SnowflakeServer.html)
 
 ### 6. Self-Contained
 The container should only rely on the Linux kernel. All dependencies should be added at build time. E.g. Build an Uber-Jar which includes a webserver.
