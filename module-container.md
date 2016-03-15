@@ -12,7 +12,7 @@ Developing container based applications is still a fairly new topic. This docume
 
 ## Definition
 
-The term "module container" builds upon "application container" coined by Docker. An application container focuses on running a single process in contrast to multiple processes per container. If the application consists of multiple processes they are spread out to different containers. A module container refines application container with the focuses on being a good building block. In addition it suggests an even smaller granularity.
+The term "module container" builds upon "application container" coined by Docker. An application container focuses on running a single process in contrast to multiple processes per container. If the application consists of multiple processes they are spread out to different containers. A module container refines application container with the focus on being a good building block. In addition it suggests an even smaller granularity.
 
 ## Related work
 
@@ -38,10 +38,10 @@ There is no clear definition of a "module container". Instead we gathered a set 
 
 ### 1. Linux process
 
-Before we come up with to many new ideas we should acknowledge the fact that a container is foremost a Linux process. Therefor we should apply common standards and best practices for writing Unix tools which happen to be containers.
+Before we come up with to many new ideas we should acknowledge the fact that a container is foremost a Linux process. Therefore we should apply common standards and best practices for writing Unix tools which happen to be containers.
 
 #### React to signals
-A container should react to [signals](https://en.wikipedia.org/wiki/Unix_signal) which are being send to it. This starts with that we don't daemonize our process and keep it in the foreground. We catch signals in the program and react appropriate. 
+A container should react to [signals](https://en.wikipedia.org/wiki/Unix_signal) which are sent to it. This starts with that we don't daemonize our process and keep it in the foreground. We catch signals in the program and react appropriately. 
 
 **Use the exec form**:  
 For Docker prefer the [exec form](https://docs.docker.com/engine/reference/builder/#run) which doesn't invoke a shell.
@@ -68,14 +68,14 @@ https://github.com/luebken/currentweather/blob/master/server.js#L49
 **Further reading:**  
 
 * The [man page](http://man7.org/linux/man-pages/man7/signal.7.html) contains a good overview of signals.
-* [What makes an awesome CLI Application](https://pragprog.com/magazines/2012-05/what-makes-an-awesome-commandline-application) give some inspiration.
+* [What makes an awesome CLI Application](https://pragprog.com/magazines/2012-05/what-makes-an-awesome-commandline-application) gives some inspiration.
 * [Signal handlers must be reentrant](http://blog.rubybestpractices.com/posts/ewong/016-Implementing-Signal-Handlers.html#fn1) What happens when another signal arrives while this handler is still running?
 * [Self pipe trick](http://cr.yp.to/docs/selfpipe.html) Maintain a pipe for signals. 
 
 #### Return exit codes
 We should return proper exit codes when exiting the container. This gives us a better overview of what happened and the scheduler / init process better means of scheduling. E.g. in Kubernetes you can define that only failed containers [should be restarted](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/pod-states.md#restartpolicy).
 
-We generally just differ between the exit code `0` as a successful termination and something `>0` as a failure. But other exit codes are conceivable. Some inspiration might give [glibc](https://github.molgen.mpg.de/git-mirror/glibc/blob/master/misc/sysexits.h) or [bash](http://tldp.org/LDP/abs/html/exitcodes.html).
+We generally just differ between the exit code `0` as a successful termination and something `>0` as a failure. But other exit codes are conceivable. For some inspiration, check out [glibc](https://github.molgen.mpg.de/git-mirror/glibc/blob/master/misc/sysexits.h) or [bash](http://tldp.org/LDP/abs/html/exitcodes.html).
 
 **Example:**  
 Return a non-failure exit code in Node.JS:
@@ -89,7 +89,7 @@ https://github.com/luebken/currentweather/blob/master/server.js#L52
 
 Linux processes use standard streams as a means of communication. There are `stdin`: standard input, `stdout`: standard output and `stderr` standard error:
 
-* `stdout`: For all logging activities use stdout let the infrastructure take care of handling this stream or forwarding it to some log aggregator. 
+* `stdout`: For all logging activities use stdout and let the infrastructure take care of handling this stream or forwarding it to some log aggregator. 
 
 Note: if you do have specific logging requirements you can use a side-car container to adapt your logs. See the composite patterns for details.
 
@@ -123,9 +123,9 @@ Although our container is foremost a Linux process it is also contained in it's 
 
 #### Use Environment Variables
 
-In addition or as an alternative to command line arguments we can use environment variables to inject information into our container. Especially for configuration this has been made popular by the 12 Factor App: [III. Config Store config in the environment](Store config in the environment). They are easy to change between deploys and no danger of checkin into a VCS.
+In addition or as an alternative to command line arguments we can use environment variables to inject information into our container. Especially for configuration this has been made popular by the 12 Factor App: [III. Config Store config in the environment](https://12factor.net/config). They are easy to change between deploys and there's no danger of checking them into a VCS.
 
-With Docker a common best practice is to set the [defaults envs](https://docs.docker.com/engine/reference/builder/#env) in the image and let the user overwrite it [](https://docs.docker.com/engine/reference/run/#env-environment-variables). See the section with labels below as an idea how to document these. 
+With Docker a common best practice is to set the [defaults envs](https://docs.docker.com/engine/reference/builder/#env) in the image and let the user [overwrite it](https://docs.docker.com/engine/reference/run/#env-environment-variables). See the section with labels below as an idea how to document these. 
 
 Links:
 
@@ -136,7 +136,7 @@ Links:
 
 #### Declare Available Ports
 
-Another interface are the network ports our container potentially listens on. With the [EXPOSE](https://docs.docker.com/engine/reference/builder/#expose) directive. The ports will then show up in `docker ps` and `docker inspect`. And they can be [enforced](https://docs.docker.com/engine/userguide/networking/default_network/container-communication/#communication-between-containers) with setting `ipables=true` && `icc=false`.
+Another interface are the network ports our container potentially listens on. With the [EXPOSE](https://docs.docker.com/engine/reference/builder/#expose) directive. The ports will then show up in `docker ps` and `docker inspect`, and they can be [enforced](https://docs.docker.com/engine/userguide/networking/default_network/container-communication/#communication-between-containers) with setting `iptables=true` && `icc=false`.
 
 #### Volume mounts
 
@@ -145,16 +145,16 @@ In Docker you can define volumes when starting the container or when defining th
 
 #### Hooks
 
-Sometimes a container needs to react to different events during it's life time. Before termination we can check for the termination signal but that is limited since no context information can be given. In addition we might want to react to more events like a post startup event.
+Sometimes a container needs to react to different events during it's lifetime. Before termination we can check for the termination signal but that is limited since no context information can be given. In addition we might want to react to more events like a post startup event.
 
-A good example are [container hooks in Kubernetes](http://kubernetes.io/docs/user-guide/container-environment/#container-hooks). Another example are the [hooks in the opencontainer spec](https://github.com/opencontainers/specs/blob/master/config.md#hooks). 
+Good examples are [container hooks in Kubernetes](http://kubernetes.io/docs/user-guide/container-environment/#container-hooks), and the [hooks in the opencontainer spec](https://github.com/opencontainers/specs/blob/master/config.md#hooks).
 
 Docker currently doesn't natively support hooks but there is a proposal about adding them: [#6982](https://github.com/docker/docker/issues/6982). Docker does submit [events](https://docs.docker.com/engine/reference/commandline/events/) which can be leveraged to implement non-blocking hooks. Jeff Lindsay happened to implement exactly this with [dockerhook](https://github.com/progrium/dockerhook). Another project to have look at is entrykit with it's [prehook](https://github.com/progrium/entrykit#prehook---run-pre-commands-on-start).
 
 
 ### 3. Descriptive
 
-A good module has an explicit or as wikipedia says [well defined](https://en.wikipedia.org/wiki/Modular_programming#Key_aspects) interface. So with all the ways of creating an API for our container we also need a way to expose this. Which is what we do with the `EXPOSE` or the `VOLUME` declaration. We want to expand on that and use Labels to document more of our API.
+A good module has an explicit, or as wikipedia says [well defined](https://en.wikipedia.org/wiki/Modular_programming#Key_aspects) interface. So with all the ways of creating an API for our container we also need a way to expose this. Which is what we do with the `EXPOSE` or the `VOLUME` declaration. We want to expand on that and use labels to document more of our API.
 
 
 #### Document With Labels
@@ -187,7 +187,7 @@ $ docker inspect -f "{{json .Config.Labels }}" <container image>
 
 #### View the API contract of a module container
 
-If you take this a step further an agree on some standard labels and schemas you could write tools that introspect the API contract of a container. e.g.
+If you take this a step further and agree on some standard labels and schemas you could write tools that introspect the API contract of a container. e.g.
 
 
 ```
@@ -226,7 +226,7 @@ A module container should always strive for being exchanged with a copy at any p
  * Errors within the container
  * Migration to new hardware / locality of services
 
-This concept widely accepted in the container space that developers use the `--rm` with Docker as a default which always remove the container after they have stopped. We have chosen the term "disposable" from the [12Factor app](http://12factor.net/disposability).
+This concept is so widely accepted in the container space that developers use the `--rm` with Docker as a default which always remove the container after they have stopped. We have chosen the term "disposable" from the [12Factor app](http://12factor.net/disposability).
 
 #### Best practices
 
@@ -237,7 +237,7 @@ This concept widely accepted in the container space that developers use the `--r
 
 ### 5. Immutable
 
-The container image contains the OS, libraries, configurations, files and application code. Once a container image is built it shouldn’t be changed especially not between different staging environments like dev, qa and production. State should be extracted and changes to the container should be applied by rebuilding the container.
+The container image contains the OS, libraries, configurations, files and application code. Once a container image is built it shouldn’t be changed, especially not between different staging environments like dev, qa and production. State should be extracted and changes to the container should be applied by rebuilding the container.
 
 #### Best practices
 * Have a [dev / prod parity](http://12factor.net/dev-prod-parity) with the container image
@@ -280,12 +280,12 @@ Which is blatantly copied from the great blogpost by Kelsey on [12 Fractured App
 
 Links:
 
-* Configuration of applications running in containers https://github.com/joyent/containerbuddy
-* A dynamic configuration file generation tool:  https://github.com/markround/tiller
+* Configuration of applications running in containers: https://github.com/joyent/containerbuddy
+* A dynamic configuration file generation tool: https://github.com/markround/tiller
 
 
 ### 7. Small
-A container should have the least amount of code / libraries as possible to fulfil its job. 
+A container should have the least amount of code / libraries as possible to fulfil it's job. 
 
 Reasons for a smaller image:
 
@@ -301,6 +301,6 @@ Also have a look at Alpine. A minimalist Linux distribution based on busybox, mu
 
 See image building guidelines like:
 
-* [Open Shift Guideline](https://docs.openshift.org/latest/creating_images/guidelines.html) 
+* [OpenShift Guideline](https://docs.openshift.org/latest/creating_images/guidelines.html) 
 * [Docker best practices for writing Dockerfiles](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/)
 * [Project Atomic Guidance for Docker Image Authors](http://www.projectatomic.io/docs/docker-image-author-guidance/)
