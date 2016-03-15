@@ -16,14 +16,13 @@ The term "module container" builds upon "application container" coined by Docker
 
 ## Related work
 
-In this field there is much prior and contemporary art.
+In this field there is much prior and contemporary art:
 
 * [The 12 Factor App](http://12factor.net/) a widely cited site describing how to write good PaaS applications. Initiated by Heroku. Many of these principles apply for containers as well.
 
 * Cloud native: In the past year the term "cloud native applications" has gained popularity. A good introduction can be found in the free ebook [Migrating to Cloud Native Application Architectures](http://pivotal.io/platform/migrating-to-cloud-native-application-architectures-ebook)
 
-[//]: # (TODO include cluster aware images once a post is up)
-
+The folks from [Deis](http://deis.io/) have coined the term [cluster aware image](https://twitter.com/gabrtv/status/676218070357032961).
 
 ## Properties of a module container
 
