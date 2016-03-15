@@ -158,9 +158,7 @@ Sometimes a container needs to react to different events during it's life time. 
 
 A good example are [container hooks in Kubernetes](http://kubernetes.io/v1.1/docs/user-guide/container-environment.html#container-hooks). Another  example are the [hooks in the opencontainer spec](https://github.com/opencontainers/specs/blob/master/config.md#hooks). 
 
-Docker currently doesn't natively support hooks but there is a proposal about adding them: [#6982](https://github.com/docker/docker/issues/6982).
-
-Docker does submit [events](https://docs.docker.com/engine/reference/commandline/events/) which can be leveraged to implement non-blocking hooks. Jeff Lindsay happened to implement exactly this with [dockerhook](https://github.com/progrium/dockerhook).		
+Docker currently doesn't natively support hooks but there is a proposal about adding them: [#6982](https://github.com/docker/docker/issues/6982). Docker does submit [events](https://docs.docker.com/engine/reference/commandline/events/) which can be leveraged to implement non-blocking hooks. Jeff Lindsay happened to implement exactly this with [dockerhook](https://github.com/progrium/dockerhook).		
 
 [//]: # (TODO write a proposal for adding this as a label)
 [//]: # (TODO look at native docker plugins )
@@ -179,7 +177,7 @@ Docker has the ability to add arbitrary metadata to images via [labels](https://
 Gareth Rushgrove is evangelizing the idea of creating standards on this data and creating ["shipping manifests"](https://speakerdeck.com/garethr/shipping-manifests-bill-of-lading-and-docker-metadata-and-container
 ). He has even written a tool that validates the schema of this data: [docker-label-inspector](https://github.com/garethr/docker-label-inspector). See his Dockercon [presentation](https://www.youtube.com/watch?v=j4SZ1qoR8Hs) and [slides](https://speakerdeck.com/garethr/shipping-manifests-bill-of-lading-and-docker-metadata-and-container) for details.
 
-There is also an initiative on [standard labels](https://github.com/projectatomic/ContainerApplicationGenericLabels).
+From Redh Hat there is an initiative on [standardizing certain labels](https://github.com/projectatomic/ContainerApplicationGenericLabels).
 
 As an example we want to document an environment variable that our container needs:
 
@@ -228,11 +226,18 @@ $ container-api luebken/currentweather-nodejs
 
 For more info see: https://github.com/luebken/container-api
 
-
 [//]: # (TODO think about a depends /expect label: https://github.com/docker/docker/issues/7247)
+[//]: # (TODO read appc spec on dependencies: https://github.com/appc/spec/blob/master/spec/aci.md#dependency-matching)
 [//]: # (TODO think about a  https://github.com/docker/docker/issues/12142)
 [//]: # (TODO think about Does this goes along: Dependency Injects / Service Locator patterns?)
 [//]: # (TODO comment on Feature request: https://github.com/docker/docker/issues/20360)
+[//]: # (TODO solomon doesn't believe labels should be in the the image https://groups.google.com/a/opencontainers.org/forum/#!msg/dev/RF6qm-75IJ0/Jcz-CC_2DwAJ)
+
+
+More ideas to use labels / meta data
+ * bookeeping of included libraries
+ *  
+
 
 ### 4. Disposable
 
