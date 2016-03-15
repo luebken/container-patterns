@@ -26,7 +26,7 @@ The folks from [Deis](http://deis.io/) have coined the term [cluster aware image
 
 ## Properties of a module container
 
-There is no clear definition of a "module container". Instead we gathered  a set of guiding properties and associated best practices:
+There is no clear definition of a "module container". Instead we gathered a set of guiding properties and associated best practices:
 
 1. [Linux process](#1-linux-process)
 2. [Container API](#2-container-api)
@@ -63,7 +63,7 @@ process.on('SIGTERM', function () {
   });
 });
 ```
-https://github.com/luebken/currentweather/blob/master/server.js#L47
+https://github.com/luebken/currentweather/blob/master/server.js#L49
 
 **Further reading:**  
 
