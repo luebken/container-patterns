@@ -217,7 +217,7 @@ For more info see: https://github.com/luebken/container-api
 
 ### 4. Disposable
 
-The [Pets vs Cattle](https://blog.engineyard.com/2014/pets-vs-cattle) is the infamous article about an analogy which differ two different server types. There are pets which you give names and want to hold on and catles which you give numbers and can be exchanged easily.
+The [Pets vs Cattle](https://blog.engineyard.com/2014/pets-vs-cattle) is the infamous article about an analogy which differs two different server types. There are pets which you give names and want to hold on and cattle which you give numbers and can be exchanged easily.
 
 A module container should always strive for being exchanged with a copy at any point of time. This especially true in an cluster environment where there can be many reasons for a particular container be stopped:
  
@@ -226,9 +226,7 @@ A module container should always strive for being exchanged with a copy at any p
  * Errors within the container
  * Migration to new hardware / locality of services
 
-This concept widely accepted in the container space that developers use the `--rm` with Docker as a default which always remove the container after they have stopped. We have http://12factor.net/disposabilitychosen the term "disposable" from the [12Factor app](http://12factor.net/disposability).
-
-[//]: # (Most argued property so far. Would should put some Ops perspective on this which want to keep as much as possible in the case of a failure.) 
+This concept widely accepted in the container space that developers use the `--rm` with Docker as a default which always remove the container after they have stopped. We have chosen the term "disposable" from the [12Factor app](http://12factor.net/disposability).
 
 #### Best practices
 
