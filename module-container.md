@@ -154,39 +154,40 @@ Docker currently doesn't natively support hooks but there is a proposal about ad
 
 ### 3. Descriptive
 
-A good module has an explicit or as wikipedia says [well defined](https://en.wikipedia.org/wiki/Modular_programming#Key_aspects) interface. So with all the ways of creating an API for our container we also need a way to expose this. Which is what we do with the EXPOSE or the VOLUME declaration. We want to expand on that and use Labels to document more of our API.
+A good module has an explicit or as wikipedia says [well defined](https://en.wikipedia.org/wiki/Modular_programming#Key_aspects) interface. So with all the ways of creating an API for our container we also need a way to expose this. Which is what we do with the `EXPOSE` or the `VOLUME` declaration. We want to expand on that and use Labels to document more of our API.
 
 
 #### Document With Labels
 
+We like to propose to document the API with labels as all container engines have the means of doing so.
+
 Docker has the ability to add arbitrary metadata to images via [labels](https://docs.docker.com/engine/userguide/labels-custom-metadata/) which can be even [JSON](https://docs.docker.com/engine/userguide/labels-custom-metadata/#store-structured-data-in-labels).
 
-Gareth Rushgrove is evangelizing the idea of creating standards on this data and creating ["shipping manifests"](https://speakerdeck.com/garethr/shipping-manifests-bill-of-lading-and-docker-metadata-and-container
+Gareth Rushgrove has been evangelising the idea of creating standards on this data and creating ["shipping manifests"](https://speakerdeck.com/garethr/shipping-manifests-bill-of-lading-and-docker-metadata-and-container
 ). He has even written a tool that validates the schema of this data: [docker-label-inspector](https://github.com/garethr/docker-label-inspector). See his Dockercon [presentation](https://www.youtube.com/watch?v=j4SZ1qoR8Hs) and [slides](https://speakerdeck.com/garethr/shipping-manifests-bill-of-lading-and-docker-metadata-and-container) for details.
 
-From Redh Hat there is an initiative on [standardizing certain labels](https://github.com/projectatomic/ContainerApplicationGenericLabels).
+From Red Hat there is an initiative on [standardizing certain labels](https://github.com/projectatomic/ContainerApplicationGenericLabels).
 
-As an example we want to document an environment variable that our container needs:
+Example:
 
-```json
-{
-  "key": "OPENWEATHERMAP_APIKEY",
-  "description": "APIKEY to access the OpenWeatherMap. Get one at tp://openweathermap.org/appid",
-  "mandatory": true
-}
+As a simple example we want to document that our container expects a certain environment variable. Here a suggestion using the prefix `api.ENV`:
+
 ```
-https://github.com/luebken/currentweather/blob/master/Dockerfile#L13
+LABEL api.ENV.OPENWEATHERMAP_APIKEY="" \
+      api.ENV.OPENWEATHERMAP_APIKEY.description="Access key for OpenWeatherMap. See http://openweathermap.org/appid for details." \
+      api.ENV.OPENWEATHERMAP_APIKEY.mandatory="false"
+```
+See https://github.com/luebken/currentweather/blob/master/Dockerfile
 
-To inspect the labels use:
+We can than use tools like `docker inspect` to read these labels:
 
 ```
 $ docker inspect -f "{{json .Config.Labels }}" <container image>
 ```
-https://github.com/luebken/currentweather/blob/master/Makefile#L9
 
 #### View the API contract of a module container
 
-If you take this a step futher an agree on some standard labels and schemas you could write tools that introspect the API contract of a container. e.g.
+If you take this a step further an agree on some standard labels and schemas you could write tools that introspect the API contract of a container. e.g.
 
 
 ```
@@ -212,18 +213,6 @@ $ container-api luebken/currentweather-nodejs
 ```
 
 For more info see: https://github.com/luebken/container-api
-
-[//]: # (TODO think about a depends /expect label: https://github.com/docker/docker/issues/7247)
-[//]: # (TODO read appc spec on dependencies: https://github.com/appc/spec/blob/master/spec/aci.md#dependency-matching)
-[//]: # (TODO think about a  https://github.com/docker/docker/issues/12142)
-[//]: # (TODO think about Does this goes along: Dependency Injects / Service Locator patterns?)
-[//]: # (TODO comment on Feature request: https://github.com/docker/docker/issues/20360)
-[//]: # (TODO solomon doesn't believe labels should be in the the image https://groups.google.com/a/opencontainers.org/forum/#!msg/dev/RF6qm-75IJ0/Jcz-CC_2DwAJ)
-
-
-More ideas to use labels / meta data
- * bookeeping of included libraries
- *  
 
 
 ### 4. Disposable
