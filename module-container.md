@@ -91,11 +91,11 @@ Linux processes use standard streams as a means of communication. There are `std
 
 * `stdout`: For all logging activities use stdout let the infrastructure take care of handling this stream or forwarding it to some log aggregator. 
 
-[//]: # (TODO point to log side-car and write an example)
+Note: if you do have specific logging requirements you can use a side-car container to adapt your logs. See the composite patterns for details.
 
 * `stdin`: If our container can be be conceived as a Unix tool we should accept data from stdin. This would allow [piping between containers](http://matthewkwilliams.com/index.php/2015/04/21/piping-hot-docker-containers/).
 
-Tips / Further reading:
+Tips / further reading:
 
 * If your app writes to a file link that file to the device file:
 
@@ -123,22 +123,16 @@ Although our container is foremost a Linux process it is also contained in it's 
 
 #### Use Environment Variables
 
-In addition or as an alternative to command line arguments we can use environment variables to inject information into our container. Especially for configuration this has been made popular by the 12 Factor App: [III. Config Store config in the environment](Store config in the environment). They are easy to change between deploys and no dnager of checkin into a VCS.
+In addition or as an alternative to command line arguments we can use environment variables to inject information into our container. Especially for configuration this has been made popular by the 12 Factor App: [III. Config Store config in the environment](Store config in the environment). They are easy to change between deploys and no danger of checkin into a VCS.
 
-A common best practice is to set the [defaults envs](https://docs.docker.com/engine/reference/builder/#env) in the image and let the user overwrite it [](https://docs.docker.com/engine/reference/run/#env-environment-variables). See the section with labels below as an idea how to document these. 
+With Docker a common best practice is to set the [defaults envs](https://docs.docker.com/engine/reference/builder/#env) in the image and let the user overwrite it [](https://docs.docker.com/engine/reference/run/#env-environment-variables). See the section with labels below as an idea how to document these. 
 
+Links:
 
-[//]: # (TODO compare with rkt env handling https://coreos.com/rkt/docs/latest/subcommands/run.html#influencing-environment-variables)
-
-Links: 
-  * A discussion about the usage of envs: https://gist.github.com/telent/9742059
-  * "Parameterized Docker Containers": http://blog.james-carr.org/2013/09/04/parameterized-docker-containers/
-  * A dynamic configuration file generation tool https://github.com/markround/tiller
-
-[//]: # (TODO example with https://github.com/andreasjansson/envtpl)
-
-
-[//]: # (TODO write something about secret handling)
+* A discussion about the usage of envs: https://gist.github.com/telent/9742059
+* "Parameterized Docker Containers": http://blog.james-carr.org/2013/09/04/parameterized-docker-containers
+* A dynamic configuration file generation tool https://github.com/markround/tiller
+* A simple tool for leveraging environment variables in jinja2 templates: https://github.com/andreasjansson/envtpl
 
 #### Declare Available Ports
 
@@ -151,15 +145,11 @@ In Docker you can define volumes when starting the container or when defining th
 
 #### Hooks
 
-Sometimes a container needs to react to different events during it's life time. Before termination we can check for the termination signal but that is limited since no context information can be given. In addition we might want to react to more events like something like an event post startup.
+Sometimes a container needs to react to different events during it's life time. Before termination we can check for the termination signal but that is limited since no context information can be given. In addition we might want to react to more events like a post startup event.
 
-A good example are [container hooks in Kubernetes](http://kubernetes.io/v1.1/docs/user-guide/container-environment.html#container-hooks). Another  example are the [hooks in the opencontainer spec](https://github.com/opencontainers/specs/blob/master/config.md#hooks). 
+A good example are [container hooks in Kubernetes](http://kubernetes.io/docs/user-guide/container-environment/#container-hooks). Another example are the [hooks in the opencontainer spec](https://github.com/opencontainers/specs/blob/master/config.md#hooks). 
 
-Docker currently doesn't natively support hooks but there is a proposal about adding them: [#6982](https://github.com/docker/docker/issues/6982). Docker does submit [events](https://docs.docker.com/engine/reference/commandline/events/) which can be leveraged to implement non-blocking hooks. Jeff Lindsay happened to implement exactly this with [dockerhook](https://github.com/progrium/dockerhook).		
-
-[//]: # (TODO write a proposal for adding this as a label)
-[//]: # (TODO look at native docker plugins )
-[//]: # (TODO maybe add https://github.com/progrium/entrykit#prehook---run-pre-commands-on-start )
+Docker currently doesn't natively support hooks but there is a proposal about adding them: [#6982](https://github.com/docker/docker/issues/6982). Docker does submit [events](https://docs.docker.com/engine/reference/commandline/events/) which can be leveraged to implement non-blocking hooks. Jeff Lindsay happened to implement exactly this with [dockerhook](https://github.com/progrium/dockerhook). Another project to have look at is entrykit with it's [prehook](https://github.com/progrium/entrykit#prehook---run-pre-commands-on-start).
 
 
 ### 3. Descriptive
