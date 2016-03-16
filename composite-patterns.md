@@ -1,12 +1,19 @@
 # Composite Patterns
 
-> TODO
+> TODO: Fill out this skeleton.
 
-This document tries to examine patternns composing containers. We have currently seen:
+Containers can be composed together to form some sort of bigger unit. This document tries to examine patterns around composing containers. Currently we see:
 
 * Side-car / side-kick
+  * TODO
 * Ambassador
+  * TODO
 * Adaptor
+  * TODO
 * Chains
+  * TODO
 
-Links: http://blog.kubernetes.io/2015/06/the-distributed-system-toolkit-patterns.html
+Currently please refer to:
+
+* http://blog.kubernetes.io/2015/06/the-distributed-system-toolkit-patterns.html
+* http://www.slideshare.net/luebken/container-patterns
