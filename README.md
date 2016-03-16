@@ -1,3 +1,5 @@
+> Please note this document lives in a [WIP PR](https://github.com/luebken/container-patterns/pull/1). Feedback welcomed!
+
 # Container Patterns
 
 Building applications with container technologies like [Docker](https://www.docker.com/) or [rkt](https://github.com/coreos/rkt) allows for new architectures and decisions in application design. In this document we would like to start a discussion around this and share experiences.

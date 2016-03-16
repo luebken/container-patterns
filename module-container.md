@@ -1,10 +1,6 @@
-# WIP !!!
-
-Please note this document lives in a [WIP PR](https://github.com/luebken/container-patterns/pull/1)
-
 # Module container
 
-Developing container based applications is still a fairly new topic. This document tries to gather some best practices and suggests some new ideas from the community. These should be container runtime agnostic but still practical relevant with concrete examples. 
+Developing container based applications is still a fairly new topic. Even more general ideas like using containers as a module to architect applictions. Still this document tries to gather some best practices and suggests some new ideas to the community. Most of these ideas should be container runtime agnostic but still practical relevant with concrete examples. 
 
 > Note: Many of these ideas are formalised in the [Open Containers Spec](https://github.com/opencontainers/specs) but we want to give guidance for todays tool chain.
 
