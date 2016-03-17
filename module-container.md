@@ -22,7 +22,7 @@ The folks from [Deis](http://deis.io/) have coined the term [cluster aware image
 
 ## Properties of a module container
 
-There is no clear definition of a "module container". Instead we gathered a set of guiding properties and associated best practices:
+There is no canonical definition of a "module container". Instead we gather a set of guiding properties and associated best practices:
 
 1. [Linux process](#1-linux-process)
 2. [Container API](#2-container-api)
@@ -34,15 +34,11 @@ There is no clear definition of a "module container". Instead we gathered a set 
 
 ### 1. Linux process
 
-Before we come up with to many new ideas we should acknowledge the fact that a container is foremost a Linux process. Therefore we should apply common standards and best practices for writing Unix tools which happen to be containers.
+Before we come up with to many new ideas we should acknowledge the fact that a container is foremost a Linux process. Therefore we should apply common standards and best practices for writing Unix tools which happen to be containers. These are _React to signals_, _Use standard streams_, _Handle arguments_:
 
 #### React to signals
-A container should react to [signals](https://en.wikipedia.org/wiki/Unix_signal) which are sent to it. This starts with that we don't daemonize our process and keep it in the foreground. We catch signals in the program and react appropriately. 
+A container should react to the [signals](https://en.wikipedia.org/wiki/Unix_signal) which are sent to it. So our applications in the container should run in the foreground and catch signals and react appropriately. 
 
-**Use the exec form**:  
-For Docker prefer the [exec form](https://docs.docker.com/engine/reference/builder/#run) which doesn't invoke a shell.
-
-**Catch signals**:  
 Important signals to catch are:
 
 * `SIGINT`: E.g. send by Ctrl-C to interrupt / stop a running container.  
@@ -58,18 +54,14 @@ process.on('SIGTERM', function () {
     process.exit(0);
   });
 });
-```
+``` 
 https://github.com/luebken/currentweather/blob/master/server.js#L49
 
-**Further reading:**  
-
-* The [man page](http://man7.org/linux/man-pages/man7/signal.7.html) contains a good overview of signals.
-* [What makes an awesome CLI Application](https://pragprog.com/magazines/2012-05/what-makes-an-awesome-commandline-application) gives some inspiration.
-* [Signal handlers must be reentrant](http://blog.rubybestpractices.com/posts/ewong/016-Implementing-Signal-Handlers.html#fn1) What happens when another signal arrives while this handler is still running?
-* [Self pipe trick](http://cr.yp.to/docs/selfpipe.html) Maintain a pipe for signals. 
+**Docker best practices:**
+* Use the [exec form](https://docs.docker.com/engine/reference/builder/#run) to start you processes. Since it doesn't invoke a shell.
 
 #### Return exit codes
-We should return proper exit codes when exiting the container. This gives us a better overview of what happened and the scheduler / init process better means of scheduling. E.g. in Kubernetes you can define that only failed containers [should be restarted](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/pod-states.md#restartpolicy).
+When a process exits it should return a proper exit code. Same is true for our container. This gives us a better overview of what happened and the scheduler / init process better means of scheduling. E.g. in Kubernetes you can define that only failed containers [should be restarted](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/pod-states.md#restartpolicy).
 
 We generally just differ between the exit code `0` as a successful termination and something `>0` as a failure. But other exit codes are conceivable. For some inspiration, check out [glibc](https://github.molgen.mpg.de/git-mirror/glibc/blob/master/misc/sysexits.h) or [bash](http://tldp.org/LDP/abs/html/exitcodes.html).
 
@@ -87,30 +79,37 @@ Linux processes use standard streams as a means of communication. There are `std
 
 * `stdout`: For all logging activities use stdout and let the infrastructure take care of handling this stream or forwarding it to some log aggregator. 
 
-Note: if you do have specific logging requirements you can use a side-car container to adapt your logs. See the composite patterns for details.
-
 * `stdin`: If our container can be be conceived as a Unix tool we should accept data from stdin. This would allow [piping between containers](http://matthewkwilliams.com/index.php/2015/04/21/piping-hot-docker-containers/).
 
-Tips / further reading:
+**General best practices**
 
-* If your app writes to a file link that file to the device file:
+* If you do have specific logging requirements you can use a side-car container to adapt your logs. See the composite patterns for details.
+
+* If your app writes to a file you could link that file to the device file:
 
   ```Dockerfile
   RUN ln -sf /dev/stdout /var/log/nginx/access.log
   ```
   https://github.com/nginxinc/docker-nginx/blob/master/stable/jessie/Dockerfile#L14
 
-* In 12 factor apps: [Treat logs as event streams](http://12factor.net/logs).
+#### Handle arguments
 
-#### Handle Arguments
-
-Arguments are a straight forward way to configure and send options to a container. We propose that you should handle these in a comprehensible way.
+Arguments are a straight forward way to configure and send options to a container. We propose that you should handle these in a comprehensible way. And within your team agree on a standard.
 
 Luckily CLI arguments are a very old topic so we refer to existing standards and libraries:
 
 * [POSIX.1-2008 Utility conventions](http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html)
 * In conjunction with [getopt](http://pubs.opengroup.org/onlinepubs/9699919799/functions/getopt.html) as utility to parse / validate.
 * Libcs [Program Argument Syntax Conventions](http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html)
+
+
+#### Further reading on Linux process:
+
+* The [man page](http://man7.org/linux/man-pages/man7/signal.7.html) contains a good overview of signals.
+* [What makes an awesome CLI Application](https://pragprog.com/magazines/2012-05/what-makes-an-awesome-commandline-application) gives some inspiration.
+* [Signal handlers must be reentrant](http://blog.rubybestpractices.com/posts/ewong/016-Implementing-Signal-Handlers.html#fn1) What happens when another signal arrives while this handler is still running?
+* [Self pipe trick](http://cr.yp.to/docs/selfpipe.html) Maintain a pipe for signals. 
+* In 12 factor apps: [Treat logs as event streams](http://12factor.net/logs).
 
 
 ### 2. API
