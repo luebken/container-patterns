@@ -2,7 +2,7 @@
 
 Developing container based applications is still a fairly new topic. Even more general ideas like using containers as a module to architect applictions. Still this document tries to gather some best practices and suggests some new ideas to the community. Most of these ideas should be container runtime agnostic but still practical relevant with concrete examples. 
 
-> Note: Many of these ideas are formalised in the [Open Containers Spec](https://github.com/opencontainers/specs) but we want to give guidance for todays tool chain.
+Many of these ideas are formalised in the [Open Containers Spec](https://github.com/opencontainers/specs) but we want to give guidance for tools which are used today. We try to link to Docker, rkt and OCI examples. 
 
 > Note: This document is highly Work-In-Progress. Please get involved. Comment discuss and add your own ideas.  
 
@@ -65,7 +65,7 @@ When a process exits it should return a proper exit code. Same is true for our c
 
 We generally just differ between the exit code `0` as a successful termination and something `>0` as a failure. But other exit codes are conceivable. For some inspiration, check out [glibc](https://github.molgen.mpg.de/git-mirror/glibc/blob/master/misc/sysexits.h) or [bash](http://tldp.org/LDP/abs/html/exitcodes.html).
 
-**Example:**  
+**Example for exit codes:**
 Return a non-failure exit code in Node.JS:
 
 ```javascript
@@ -81,7 +81,7 @@ Linux processes use standard streams as a means of communication. There are `std
 
 * `stdin`: If our container can be be conceived as a Unix tool we should accept data from stdin. This would allow [piping between containers](http://matthewkwilliams.com/index.php/2015/04/21/piping-hot-docker-containers/).
 
-**General best practices**
+**General best practices:**
 
 * If you do have specific logging requirements you can use a side-car container to adapt your logs. See the composite patterns for details.
 
@@ -114,28 +114,27 @@ Luckily CLI arguments are a very old topic so we refer to existing standards and
 
 ### 2. API
 
-Although our container is foremost a Linux process it is also contained in it's own environment. This gives our "module container" more capabilities in defining APIs to it's environment and clients.
+Although our container is foremost a Linux process it is also contained in it's own environment. This gives our "module container" more capabilities in defining APIs to it's environment and clients. These are _Use environment variables_, _Declare available ports_, _Volume mounts_ and _Hooks_.
 
-#### Use Environment Variables
+#### Use environment variables
 
-In addition or as an alternative to command line arguments we can use environment variables to inject information into our container. Especially for configuration this has been made popular by the 12 Factor App: [III. Config Store config in the environment](https://12factor.net/config). They are easy to change between deploys and there's no danger of checking them into a VCS.
+In addition or as an alternative to command line arguments we can use environment variables (short envs) to inject information into our container. Especially for configuration this has been made popular by the 12 Factor App: [III. Config Store config in the environment](https://12factor.net/config). They are easy to change between deploys and there's no danger of checking them into a VCS.
 
-With Docker a common best practice is to set the [defaults envs](https://docs.docker.com/engine/reference/builder/#env) in the image and let the user [overwrite it](https://docs.docker.com/engine/reference/run/#env-environment-variables). See the section with labels below as an idea how to document these. 
+These envs can be set when creating the image: [Docker](https://docs.docker.com/engine/reference/builder/#env), [rkt](https://github.com/appc/acbuild/blob/master/Documentation/subcommands/environment.md), [OCI](https://github.com/opencontainers/specs/blob/master/config.md#process-configuration). And let the user overwrite it when the container is started ([Docker](https://docs.docker.com/engine/reference/run/#env-environment-variables), [rkt](https://github.com/coreos/rkt/blob/master/Documentation/subcommands/run.md#influencing-environment-variables). 
 
-Links:
+#### Declare available ports
 
-* A discussion about the usage of envs: https://gist.github.com/telent/9742059
-* "Parameterized Docker Containers": http://blog.james-carr.org/2013/09/04/parameterized-docker-containers
-* A dynamic configuration file generation tool https://github.com/markround/tiller
-* A simple tool for leveraging environment variables in jinja2 templates: https://github.com/andreasjansson/envtpl
+One of the most important interface for distributed systems and the container are the network ports our container potentially listens on. 
 
-#### Declare Available Ports
+In Docker with the [EXPOSE](https://docs.docker.com/engine/reference/builder/#expose) directive the ports will then show up in `docker ps` and `docker inspect`, and they can be [enforced](https://docs.docker.com/engine/userguide/networking/default_network/container-communication/#communication-between-containers) with setting `iptables=true` && `icc=false`.
 
-Another interface are the network ports our container potentially listens on. With the [EXPOSE](https://docs.docker.com/engine/reference/builder/#expose) directive. The ports will then show up in `docker ps` and `docker inspect`, and they can be [enforced](https://docs.docker.com/engine/userguide/networking/default_network/container-communication/#communication-between-containers) with setting `iptables=true` && `icc=false`.
+In rkt with acbuild you can add a name to the [port declaration](https://github.com/appc/acbuild/blob/master/Documentation/subcommands/port.md). 
+
+OCI [currently doesn't](https://github.com/opencontainers/specs/issues/178) offer a way to declare them.
 
 #### Volume mounts
 
-In Docker you can define volumes when starting the container or when defining the image. We advise to declare volumes in the image so it can be examined before hand.
+In Docker you can define volumes when starting the container or when defining the image. We advise to declare volumes in the image so it can be examined before hand. 
 
 
 #### Hooks
@@ -147,10 +146,18 @@ Good examples are [container hooks in Kubernetes](http://kubernetes.io/docs/user
 Docker currently doesn't natively support hooks but there is a proposal about adding them: [#6982](https://github.com/docker/docker/issues/6982). Docker does submit [events](https://docs.docker.com/engine/reference/commandline/events/) which can be leveraged to implement non-blocking hooks. Jeff Lindsay happened to implement exactly this with [dockerhook](https://github.com/progrium/dockerhook). Another project to have look at is entrykit with it's [prehook](https://github.com/progrium/entrykit#prehook---run-pre-commands-on-start).
 
 
+#### Further reading on API
+
+* A discussion about the usage of envs: https://gist.github.com/telent/9742059
+* "Parameterized Docker Containers": http://blog.james-carr.org/2013/09/04/parameterized-docker-containers
+* A dynamic configuration file generation tool: https://github.com/markround/tiller
+* A simple tool for leveraging environment variables in jinja2 templates: https://github.com/andreasjansson/envtpl
+
+
+
 ### 3. Descriptive
 
 A good module has an explicit, or as wikipedia says [well defined](https://en.wikipedia.org/wiki/Modular_programming#Key_aspects) interface. So with all the ways of creating an API for our container we also need a way to expose this. Which is what we do with the `EXPOSE` or the `VOLUME` declaration. We want to expand on that and use labels to document more of our API.
-
 
 #### Document With Labels
 
