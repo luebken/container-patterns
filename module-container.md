@@ -230,7 +230,7 @@ A module container should always strive for being exchanged with a copy at any p
 
 This concept is so widely accepted in the container space that developers use the `--rm` with Docker as a default which always remove the container after they have stopped. We have chosen the term "disposable" from the [12Factor app](http://12factor.net/disposability).
 
-#### Best practices
+**Best practices on being dispoable:**
 
 * Be robust against sudden death.  
   If the container gets interrupted pass on your current job. (See ["React to signals"](#react-to-signals))
@@ -241,7 +241,7 @@ This concept is so widely accepted in the container space that developers use th
 
 The container image contains the OS, libraries, configurations, files and application code. Once a container image is built it shouldn’t be changed, especially not between different staging environments like dev, qa and production. State should be extracted and changes to the container should be applied by rebuilding the container.
 
-#### Best practices
+**Best practices on being immutable:**
 * Have a [dev / prod parity](http://12factor.net/dev-prod-parity) with the container image
 * Extract runtime state in volumes
 * Create a final file layout on build
@@ -280,7 +280,7 @@ Which is blatantly copied from the great blogpost by Kelsey on [12 Fractured App
 [//]: # (TODO https://twitter.com/kelseyhightower/status/657761769570594816)
 
 
-Links:
+#### Further reading on configuration
 
 * Configuration of applications running in containers: https://github.com/joyent/containerbuddy
 * A dynamic configuration file generation tool: https://github.com/markround/tiller
@@ -301,7 +301,7 @@ You don't have to use `Dockerfile`. Maybe creating a tar with something like [bu
 
 Also have a look at Alpine. A minimalist Linux distribution based on busybox, musl-libc, a new package manager called apk (not the Android one) and OpenRC as init system. [Some Thoughts on the Use of Alpine Linux in Docker Images](http://www.skippbox.com/thoughts-on-the-use-of-alpine-linux-in-docker-images/).
 
-See image building guidelines like:
+#### Further reading on image building guidelines
 
 * [OpenShift Guideline](https://docs.openshift.org/latest/creating_images/guidelines.html) 
 * [Docker best practices for writing Dockerfiles](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/)
