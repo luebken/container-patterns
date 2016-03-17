@@ -22,6 +22,6 @@ Currently most of the discussions are done in other channels. The first idea to 
 We currently see two major topics:
 
 * [Module Container](module-container.md)
-* [Composite Patterns](composite-patterns.md)
+* [Composite Patterns](composite-patterns.md) (WIP)
 
 In addition we are collecting links which we found valuable at [resources.md](resources.md)
