@@ -157,7 +157,7 @@ Docker currently doesn't natively support hooks but there is a proposal about ad
 
 ### 3. Descriptive
 
-A good module has an explicit, or as wikipedia says [well defined](https://en.wikipedia.org/wiki/Modular_programming#Key_aspects) interface. So with all the ways of creating an API for our container we also need a way to expose this. Which is what we do with the `EXPOSE` or the `VOLUME` declaration. We want to expand on that and use labels to document more of our API.
+A good module has an explicit, or as wikipedia says [well defined](https://en.wikipedia.org/wiki/Modular_programming#Key_aspects) interface. So with all the ways declaring an API for our container we also need a way to document this. As this is not always possible within the declaration we want to expand on that and use labels to document our API.
 
 #### Document With Labels
 
