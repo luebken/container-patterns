@@ -145,6 +145,10 @@ Good examples are [container hooks in Kubernetes](http://kubernetes.io/docs/user
 
 Docker currently doesn't natively support hooks but there is a proposal about adding them: [#6982](https://github.com/docker/docker/issues/6982) and an Fedora/Atomic [patch](https://github.com/projectatomic/docker/tree/fedora-1.10#add-dockerhooks-exec-custom-hooks-for-prestart-postspatch). Docker does submit [events](https://docs.docker.com/engine/reference/commandline/events/) which can be leveraged to implement non-blocking hooks. Jeff Lindsay happened to implement exactly this with [dockerhook](https://github.com/progrium/dockerhook). Another project to have look at is entrykit with it's [prehook](https://github.com/progrium/entrykit#prehook---run-pre-commands-on-start).
 
+#### Health endpoints
+
+A major part of running containers in a cluster is checking weather they are healthy. A good example again can be found in [Kubernetes](http://kubernetes.io/docs/user-guide/production-pods/#liveness-and-readiness-probes-aka-health-checks) or with [Consul](https://www.consul.io/intro/getting-started/checks.html). There is currently no format on how these checks should look like to so it's more about documenting the existing once.
+
 
 #### Further reading on API
 
