@@ -10,7 +10,7 @@ We are mainly talking about **cloud aware applications**. Or as the [cloud nativ
 
 The goal is to find and describe general applicable patterns for building these kind applications. The patterns should be container runtime agnostic but with concrete examples.
 
-We currently assume that using several containers is a good idea. The reasons for this are manifold and won't be discussed in detail. Here just a couple of reasons: “Independent releasable”, “Reuse of domain / infrastructure components”, “Separate processing types”, “Different loads”, “POCs isolation”, “Use different languages / versions / libraries”, “Enforce architectural boundaries”, “Crash isolation” or simply “Different teams”.
+We currently assume that using several containers is a good idea. The reasons for this are manifold and won't be discussed in detail. Here just a couple of reasons: “Independent releasable”, "Reuse of domain / infrastructure components”, “Separate processing types”, “Different loads”, “POCs isolation”, "Composability", “Use different languages / versions / libraries”, “Enforce architectural boundaries”, “Robustness / crash isolation” or simply “Different teams”.
 
 ### State
 
