@@ -1,14 +1,14 @@
 # Module container
 
-Developing container based applications is still a fairly new topic. Even more general ideas like using containers as a module to architect applictions. Still this document tries to gather some best practices and suggests some new ideas to the community. Most of these ideas should be container runtime agnostic but still practical relevant with concrete examples. 
+Developing container based applications is still a fairly new topic and even more are for example ideas such as using containers as modules to architect applictions. Be that as it may, this document tries to gather the current best practices and even tries to suggest new ideas and directions for consumption and use by the community. Most of these ideas should be container runtime agnostic but still practical with relevant and demonstratable examples. 
 
-Many of these ideas are formalised in the [Open Containers Spec](https://github.com/opencontainers/specs) but we want to give guidance for tools which are used today. We try to link to Docker, rkt and OCI examples. 
+Many of these ideas are formalised in the [Open Containers Spec](https://github.com/opencontainers/specs) but we want to give guidance for tools in use today. We will try to link to Docker, rkt and OCI examples where applicable. 
 
 > Note: This document is highly Work-In-Progress. Please get involved. Comment discuss and add your own ideas.  
 
 ## Definition
 
-The term "module container" builds upon "application container" coined by Docker. An application container focuses on running a single process in contrast to multiple processes per container. If the application consists of multiple processes they are spread out to different containers. A module container refines application container with the focus on being a good building block. In addition it suggests an even smaller granularity.
+The term "module container" builds upon the term "application container" coined by Docker [cite date?]. An application container focuses on running a single process in contrast to multiple processes per container. If the application consists of multiple processes they may be shared and spread out to amoungst many containers. A module container refines an application container and focuses on being a modular isolated building block in the provision of a service. In addition its existance suggests an even smaller level of achievable granularity.
 
 ## Related work
 
@@ -34,7 +34,7 @@ There is no canonical definition of a "module container". Instead we gather a se
 
 ### 1. Linux process
 
-Before we come up with to many new ideas we should acknowledge the fact that a container is foremost a Linux process. Therefore we should apply common standards and best practices for writing Unix tools which happen to be containers. These are _React to signals_, _Use standard streams_, _Handle arguments_:
+Before we try to introduce too many new ideas. We should acknowledge the fact, that a container is foremost a Linux process. Therefore we should apply the same standards and best practices for writing Unix tools, that now happen to be running in containers. These are _React to signals_, _Use standard streams_, _Handle arguments_:
 
 #### React to signals
 A container should react to the [signals](https://en.wikipedia.org/wiki/Unix_signal) which are sent to it. So our applications in the container should run in the foreground and catch signals and react appropriately. 
@@ -61,9 +61,9 @@ https://github.com/luebken/currentweather/blob/master/server.js#L49
 * Use the [exec form](https://docs.docker.com/engine/reference/builder/#run) to start you processes. Since it doesn't invoke a shell.
 
 #### Return exit codes
-When a process exits it should return a proper exit code. Same is true for our container. This gives us a better overview of what happened and the scheduler / init process better means of scheduling. E.g. in Kubernetes you can define that only failed containers [should be restarted](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/pod-states.md#restartpolicy).
+When a process exits it should return a proper exit code. The same is true for our container. This gives us a better overview of the event context and the scheduler / init process better means of scheduling. E.g. in Kubernetes you can define that only failed containers [should be restarted](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/pod-states.md#restartpolicy).
 
-We generally just differ between the exit code `0` as a successful termination and something `>0` as a failure. But other exit codes are conceivable. For some inspiration, check out [glibc](https://github.molgen.mpg.de/git-mirror/glibc/blob/master/misc/sysexits.h) or [bash](http://tldp.org/LDP/abs/html/exitcodes.html).
+We generally just differ between the exit code `0` as a successful termination and something `>0` as a failure. But other exit codes are also conceivable. For some inspiration, check out [glibc](https://github.molgen.mpg.de/git-mirror/glibc/blob/master/misc/sysexits.h) or [bash](http://tldp.org/LDP/abs/html/exitcodes.html).
 
 **Example for exit codes:**
 Return a non-failure exit code in Node.JS:
@@ -94,9 +94,9 @@ Linux processes use standard streams as a means of communication. There are `std
 
 #### Handle arguments
 
-Arguments are a straight forward way to configure and send options to a container. We propose that you should handle these in a comprehensible way. And within your team agree on a standard.
+Arguments are a straightforward way to configure and send options to a container. We propose that you should handle these in a prescribed manner. And get the team responsible to discuss and agree on a standard.
 
-Luckily CLI arguments are a very old topic so we refer to existing standards and libraries:
+Luckily CLI arguments are a well defined topic so we refer to existing standards and libraries instead of re-inventing the wheel:
 
 * [POSIX.1-2008 Utility conventions](http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html)
 * In conjunction with [getopt](http://pubs.opengroup.org/onlinepubs/9699919799/functions/getopt.html) as utility to parse / validate.
@@ -115,7 +115,7 @@ Luckily CLI arguments are a very old topic so we refer to existing standards and
 
 ### 2. API
 
-Although our container is foremost a Linux process it is also contained in it's own environment. This gives our "module container" more capabilities in defining APIs to it's environment and clients. These are _Use environment variables_, _Declare available ports_, _Volume mounts_ and _Hooks_.
+Although our container is foremost a Linux process. It is also contained in it's own environment. This gives our "module container" more posibilities for defining APIs and contracts with it's environment and consuming clients. These are _Use environment variables_, _Declare available ports_, _Volume mounts_ and _Hooks_.
 
 #### Use environment variables
 
@@ -125,7 +125,7 @@ These envs can be set when creating the image: [Docker](https://docs.docker.com/
 
 #### Declare available ports
 
-One of the most important interface for distributed systems and the container are the network ports our container potentially listens on. 
+One of the most important interfaces for distributed systems (and the container) are the network ports that the container listens on. 
 
 In Docker with the [EXPOSE](https://docs.docker.com/engine/reference/builder/#expose) directive the ports will then show up in `docker ps` and `docker inspect`, and they can be [enforced](https://docs.docker.com/engine/userguide/networking/default_network/container-communication/#communication-between-containers) with setting `iptables=true` && `icc=false`.
 
@@ -140,7 +140,7 @@ In Docker you can define volumes when starting the container or when defining th
 
 #### Hooks
 
-Sometimes a container needs to react to different events during it's lifetime. Before termination we can check for the termination signal but that is limited since no context information can be given. In addition we might want to react to more events like a post startup event.
+Sometimes a container needs to react to a range of events during it's lifetime. Before termination we coul check for the termination signal, but that is a rather limited option; since no context information can be given. In addition, we might want to react to additional events such as for example: a post startup event.
 
 Good examples are [container hooks in Kubernetes](http://kubernetes.io/docs/user-guide/container-environment/#container-hooks), and the [hooks in the opencontainer spec](https://github.com/opencontainers/specs/blob/master/config.md#hooks).
 
@@ -148,7 +148,7 @@ Docker currently doesn't natively support hooks but there is a proposal about ad
 
 #### Health endpoints
 
-A major part of running containers in a cluster is checking weather they are healthy. A good example again can be found in [Kubernetes](http://kubernetes.io/docs/user-guide/production-pods/#liveness-and-readiness-probes-aka-health-checks) or with [Consul](https://www.consul.io/intro/getting-started/checks.html). There is currently no format on how these checks should look like to so it's more about documenting the existing once.
+A major part of running containers in a cluster is checking whether they are healthy. A good example again can be found in [Kubernetes](http://kubernetes.io/docs/user-guide/production-pods/#liveness-and-readiness-probes-aka-health-checks) or with [Consul](https://www.consul.io/intro/getting-started/checks.html). Currently no format on how these checks have been defined , so it's far more important to be disciplined in ensuring that the existing checks are documented and described appropriately.
 
 
 #### Further reading on API
@@ -162,11 +162,11 @@ A major part of running containers in a cluster is checking weather they are hea
 
 ### 3. Descriptive
 
-A good module has an explicit, or as wikipedia says [well defined](https://en.wikipedia.org/wiki/Modular_programming#Key_aspects) interface. So with all the ways declaring an API for our container we also need a way to document this. As this is not always possible within the declaration we want to expand on that and use labels to document our API.
+A good module has an explicit, or as wikipedia says [well defined](https://en.wikipedia.org/wiki/Modular_programming#Key_aspects) interface. So with all the ways declaring an API for our container we also need a way to document this. Unfortunately, as this is not always possible within the declaration; we want to expand on the definition and use labels to document our API.
 
 #### Document With Labels
 
-We like to propose to document the API with labels as all container engines have the means of doing so.
+We generally prefer to document the API with labels, as all container engines have the means of doing so.
 
 Docker has the ability to add arbitrary metadata to images via [labels](https://docs.docker.com/engine/userguide/labels-custom-metadata/) which can be even [JSON](https://docs.docker.com/engine/userguide/labels-custom-metadata/#store-structured-data-in-labels).
 
@@ -226,25 +226,25 @@ For more info see: https://github.com/luebken/container-api
 
 The [Pets vs Cattle](https://blog.engineyard.com/2014/pets-vs-cattle) is the infamous article about an analogy which differs two different server types. There are pets which you give names and want to hold on and cattle which you give numbers and can be exchanged easily.
 
-A module container should always strive for being exchanged with a copy at any point of time. This especially true in an cluster environment where there can be many reasons for a particular container be stopped:
+A module container should always strive to be able to be exchanged with a fresh instance, at any point of time. This is especially true in a cluster environment, where there are a many reasons that a single container can be stopped:
  
  * Rescheduling because of limit or bad resources
  * Down-scaling
  * Errors within the container
  * Migration to new hardware / locality of services
 
-This concept is so widely accepted in the container space that developers use the `--rm` with Docker as a default which always remove the container after they have stopped. We have chosen the term "disposable" from the [12Factor app](http://12factor.net/disposability).
+This concept is so widely accepted in the container space that developers use the `--rm` with Docker as a default which always removes the container after it has stopped. We have chosen the term "disposable" from the [12Factor app](http://12factor.net/disposability).
 
 **Best practices on being dispoable:**
 
 * Be robust against sudden death.  
-  If the container gets interrupted pass on your current job. (See ["React to signals"](#react-to-signals))
+  If the container gets interrupted, pass your current job on to another instance if possible. (See ["React to signals"](#react-to-signals))
 * Minimal setup  
   If more setup needed let the scheduler know and use [hooks](#hooks).
 
 ### 5. Immutable
 
-The container image contains the OS, libraries, configurations, files and application code. Once a container image is built it shouldn’t be changed, especially not between different staging environments like dev, qa and production. State should be extracted and changes to the container should be applied by rebuilding the container.
+The container image contains the OS, libraries, configurations, files and application code. Once a container image is built it should not be changed. Especially not as it moves through the various environments dev, staging, qa and production. If state should be extracted and changed. Then that state should be applied by the rebuilding of the container. (@luebken, Im not sure I caught the gist of this here)
 
 **Best practices on being immutable:**
 * Have a [dev / prod parity](http://12factor.net/dev-prod-parity) with the container image
@@ -255,10 +255,10 @@ The container image contains the OS, libraries, configurations, files and applic
 ### 6. Self-Contained
 The container should only rely on the Linux kernel. All dependencies should be added at build time. E.g. In the Java world build an Uber-Jar which includes a webserver.
 
-Sometimes developers put application code into a volume to cut the container build time. If you do so please do it only for yourself and include all application code once the container leaves your computer.
+Sometimes developers put application code into a volume to cut the container build time. If you do this, please ensure that you do it only for yourself. And remember to invlude all application code, once the container leaves your computer and moves into another environment.
 
 #### Configuration
-If your container relies on configuration files generate them on the fly. For the parameters use sensible defaults so a simple zero-config deployment is possible.
+If your container relies on configuration files generate them on the fly. Ensure that you use sensible defaults for the parameter; this ensures as simple a zero-config deployment is possible.
 
 There are several tools out there to help generate config files. E.g. [progrium/entrykit](https://github.com/progrium/entrykit#render---template-rendering) or [kelseyhightower/confd](https://github.com/kelseyhightower/confd). But also a simple shell script might do the job e.g.:
 
@@ -292,7 +292,7 @@ Which is blatantly copied from the great blogpost by Kelsey on [12 Fractured App
 
 
 ### 7. Small
-A container should have the least amount of code / libraries as possible to fulfil it's job. 
+A container should have the minimum amount of code / libraries as possible to fulfil it's single purpose. 
 
 Reasons for a smaller image:
 
