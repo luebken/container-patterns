@@ -83,7 +83,7 @@ Linux processes use standard streams as a means of communication. There are `std
 
 **General best practices:**
 
-* If you do have specific logging requirements you can use a side-car container to adapt your logs. See the composite patterns for details.
+* If you do have specific logging requirements you can use a side-car container to adapt your logs. See the [composite patterns](composite-patterns.md) for details.
 
 * If your app writes to a file you could link that file to the device file:
 
