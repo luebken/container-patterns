@@ -297,7 +297,7 @@ Reasons for a smaller image:
 
   * Faster in the network (deploy, reschedule, update)
   * Increased I/O performance
-  * Smaller attack service. Easier to audit.
+  * Smaller attack surface. Easier to audit.
 
 Many containers are based of `debian/buildessentials` which is often unnecessary for runtime. Use different containers for building and running.
 
