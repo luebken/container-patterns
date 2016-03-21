@@ -110,6 +110,7 @@ Luckily CLI arguments are a very old topic so we refer to existing standards and
 * [Signal handlers must be reentrant](http://blog.rubybestpractices.com/posts/ewong/016-Implementing-Signal-Handlers.html#fn1) What happens when another signal arrives while this handler is still running?
 * [Self pipe trick](http://cr.yp.to/docs/selfpipe.html) Maintain a pipe for signals. 
 * In 12 factor apps: [Treat logs as event streams](http://12factor.net/logs).
+* Also be aware of [the PID 1 zombie reaping problem](https://blog.phusion.nl/2015/01/20/docker-and-the-pid-1-zombie-reaping-problem/) in Docker
 
 
 ### 2. API
