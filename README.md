@@ -8,9 +8,9 @@ Building applications with container technologies like [Docker](https://www.dock
 
 We are mainly talking about **cloud aware applications**. Or as the [cloud native foundations](https://cncf.io/about/our-mission) summarises: modern distributed systems which will be  _container packed_, _dynamically managed_ and _microservices oriented_.
 
-The goal is to find and describe general applicable patterns for building these kind applications. The patterns should be container runtime agnostic but with concrete examples.
+The goal is to find and describe general applicable patterns for building applications of this type. The patterns should be container runtime agnostic but with concrete examples.
 
-We currently assume that using several containers is a good idea. The reasons for this are manifold and won't be discussed in detail. Here just a couple of reasons: “Independent releasable”, "Reuse of domain / infrastructure components”, “Separate processing types”, “Different loads”, “POCs isolation”, "Composability", “Use different languages / versions / libraries”, “Enforce architectural boundaries”, “Robustness / crash isolation” or simply “Different teams”.
+We currently assume that using several containers is a good idea. The reasons for this are manifold and won't be discussed in detail here.  But just a couple of reasons by way of example: “Independent releasable”, "Reuse of domain / infrastructure components”, “Separate processing types”, “Different loads”, “POCs isolation”, "Composability", “Use different languages / versions / libraries”, “Enforce architectural boundaries”, “Robustness / crash isolation” or simply “Different teams”.
 
 ### State
 
