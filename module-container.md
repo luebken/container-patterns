@@ -243,7 +243,7 @@ This concept is so widely accepted in the container space that developers use th
 
 ### 5. Immutable
 
-The container image contains the OS, libraries, configurations, files and application code. Once a container image is built it should not be changed. Especially not as it moves through the various environments dev, staging, qa and production. If state should be extracted and changed. Then that state should be applied by the rebuilding of the container. (@mathias, Im not sure I caught the gist of this here)
+The container image contains the OS, libraries, configurations, files and application code. Once a container image is built it should not be changed. Especially not as it moves through the various environments dev, staging, qa and production. If state should be extracted and changed. Then that state should be applied by the rebuilding of the container. (@luebken, Im not sure I caught the gist of this here)
 
 **Best practices on being immutable:**
 * Have a [dev / prod parity](http://12factor.net/dev-prod-parity) with the container image
