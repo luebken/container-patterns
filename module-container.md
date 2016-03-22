@@ -254,10 +254,10 @@ The container image contains the OS, libraries, configurations, files and applic
 ### 6. Self-Contained
 The container should only rely on the Linux kernel. All dependencies should be added at build time. E.g. In the Java world build an Uber-Jar which includes a webserver.
 
-Sometimes developers put application code into a volume to cut the container build time. If you do so please do it only for yourself and include all application code once the container leaves your computer.
+Sometimes developers put application code into a volume to cut the container build time. If you do this, please ensure that you do it only for yourself. And remember to include all application code once the container leaves your computer.
 
 #### Configuration
-If your container relies on configuration files generate them on the fly. For the parameters use sensible defaults so a simple zero-config deployment is possible.
+If your container relies on configuration files generate them on the fly. Also ensure that you use sensible defaults for parameters which enables simple zero-config deployments.
 
 There are several tools out there to help generate config files. E.g. [progrium/entrykit](https://github.com/progrium/entrykit#render---template-rendering) or [kelseyhightower/confd](https://github.com/kelseyhightower/confd). But also a simple shell script might do the job e.g.:
 
@@ -291,7 +291,7 @@ Which is blatantly copied from the great blogpost by Kelsey on [12 Fractured App
 
 
 ### 7. Small
-A container should have the least amount of code / libraries as possible to fulfil it's job. 
+A container should have the minimum amount of code / libraries as possible to fulfil it's single purpose.
 
 Reasons for a smaller image:
 
