@@ -140,7 +140,7 @@ In Docker you can define volumes when starting the container or when defining th
 
 #### Hooks
 
-Sometimes a container needs to react to different events during it's lifetime. Before termination we can check for the termination signal but that is limited since no context information can be given. In addition we might want to react to more events like a post startup event.
+Sometimes a container needs to react to a range of events during it's lifetime. Before termination we could check for the termination signal but that is a rather limited options since no context information can be given. In addition, we might want to react to additional events such as a post startup event.
 
 Good examples are [container hooks in Kubernetes](http://kubernetes.io/docs/user-guide/container-environment/#container-hooks), and the [hooks in the opencontainer spec](https://github.com/opencontainers/specs/blob/master/config.md#hooks).
 
@@ -148,8 +148,7 @@ Docker currently doesn't natively support hooks but there is a proposal about ad
 
 #### Health endpoints
 
-A major part of running containers in a cluster is checking weather they are healthy. A good example again can be found in [Kubernetes](http://kubernetes.io/docs/user-guide/production-pods/#liveness-and-readiness-probes-aka-health-checks) or with [Consul](https://www.consul.io/intro/getting-started/checks.html). There is currently no format on how these checks should look like to so it's more about documenting the existing once.
-
+A major part of running containers in a cluster is checking whether they are healthy. A good example again can be found in [Kubernetes](http://kubernetes.io/docs/user-guide/production-pods/#liveness-and-readiness-probes-aka-health-checks) or with [Consul](https://www.consul.io/intro/getting-started/checks.html). We see these health endpoints as part of the container definition and will propose a way of documenting in the future.
 
 #### Further reading on API
 
