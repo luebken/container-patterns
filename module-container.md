@@ -34,7 +34,7 @@ There is no canonical definition of a "module container". Instead we gather a se
 
 ### 1. Linux process
 
-Before we come up with to many new ideas we should acknowledge the fact that a container is foremost a Linux process. Therefore we should apply common standards and best practices for writing Unix tools which happen to be containers. These are _React to signals_, _Use standard streams_, _Handle arguments_:
+Before we try to introduce too many new ideas, we should acknowledge the fact that a container is foremost a Linux process. Therefore we should apply common standards and best practices for writing Unix tools, that now happen to be running in containers. These are _React to signals_, _Use standard streams_, _Handle arguments_:
 
 #### React to signals
 A container should react to the [signals](https://en.wikipedia.org/wiki/Unix_signal) which are sent to it. So our applications in the container should run in the foreground and catch signals and react appropriately. 
@@ -61,9 +61,9 @@ https://github.com/luebken/currentweather/blob/master/server.js#L49
 * Use the [exec form](https://docs.docker.com/engine/reference/builder/#run) to start you processes. Since it doesn't invoke a shell.
 
 #### Return exit codes
-When a process exits it should return a proper exit code. Same is true for our container. This gives us a better overview of what happened and the scheduler / init process better means of scheduling. E.g. in Kubernetes you can define that only failed containers [should be restarted](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/pod-states.md#restartpolicy).
+When a process exits it should return a proper exit code. The same is true for our container. This gives us a better overview of the context and the scheduler / init process better means of scheduling. E.g. in Kubernetes you can define that only failed containers [should be restarted](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/pod-states.md#restartpolicy).
 
-We generally just differ between the exit code `0` as a successful termination and something `>0` as a failure. But other exit codes are conceivable. For some inspiration, check out [glibc](https://github.molgen.mpg.de/git-mirror/glibc/blob/master/misc/sysexits.h) or [bash](http://tldp.org/LDP/abs/html/exitcodes.html).
+We generally just differ between the exit code `0` as a successful termination and something `>0` as a failure. But other exit codes are also conceivable. For some inspiration, check out [glibc](https://github.molgen.mpg.de/git-mirror/glibc/blob/master/misc/sysexits.h) or [bash](http://tldp.org/LDP/abs/html/exitcodes.html).
 
 **Example for exit codes:**
 Return a non-failure exit code in Node.JS:
@@ -94,9 +94,9 @@ Linux processes use standard streams as a means of communication. There are `std
 
 #### Handle arguments
 
-Arguments are a straight forward way to configure and send options to a container. We propose that you should handle these in a comprehensible way. And within your team agree on a standard.
+Arguments are a straightforward way to configure and send options to a container. We propose that you should handle these in a prescribed manner. And get your team to discuss and agree on a standard.
 
-Luckily CLI arguments are a very old topic so we refer to existing standards and libraries:
+Luckily CLI arguments are a well defined topic so we refer to existing standards and libraries instead of re-inventing the wheel:
 
 * [POSIX.1-2008 Utility conventions](http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html)
 * In conjunction with [getopt](http://pubs.opengroup.org/onlinepubs/9699919799/functions/getopt.html) as utility to parse / validate.
