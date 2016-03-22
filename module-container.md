@@ -1,14 +1,14 @@
 # Module container
 
-Developing container based applications is still a fairly new topic. Even more general ideas like using containers as a module to architect applictions. Still this document tries to gather some best practices and suggests some new ideas to the community. Most of these ideas should be container runtime agnostic but still practical relevant with concrete examples. 
+Developing container based applications is still a fairly new topic. Even more are general ideas such as using containers as modules to architect applictions. To assit further discussions this document tries to gather current best practices and tries to suggests some new ideas to the community. Most of these ideas should be container runtime agnostic but still practical with relevant and concrete examples.
 
-Many of these ideas are formalised in the [Open Containers Spec](https://github.com/opencontainers/specs) but we want to give guidance for tools which are used today. We try to link to Docker, rkt and OCI examples. 
+Many of these ideas are formalised in the [Open Containers Spec](https://github.com/opencontainers/specs) but we want to give guidance for tools in use today. We will try to link to Docker, rkt and OCI examples where applicable.
 
 > Note: This document is highly Work-In-Progress. Please get involved. Comment discuss and add your own ideas.  
 
 ## Definition
 
-The term "module container" builds upon "application container" coined by Docker. An application container focuses on running a single process in contrast to multiple processes per container. If the application consists of multiple processes they are spread out to different containers. A module container refines application container with the focus on being a good building block. In addition it suggests an even smaller granularity.
+The term "module container" builds upon the term "application container" coined by Docker. An application container focuses on running a single process in contrast to multiple processes per container. If the application consists of multiple processes they may be spread out to different containers. A module container refines an application container and focuses on being a modular isolated building block in the provision of a service. In addition it suggests an even smaller level of granularity.
 
 ## Related work
 
