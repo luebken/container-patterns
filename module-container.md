@@ -255,6 +255,8 @@ The container should only rely on the Linux kernel. All dependencies should be a
 
 Sometimes developers put application code into a volume to cut the container build time. If you do this, please ensure that you do it only for yourself. And remember to include all application code once the container leaves your computer.
 
+The exception to this rule might sensible data like secretes or god forbid passwords. A detailed writeup about those will follow with [issue 7](https://github.com/luebken/container-patterns/issues/7).
+
 #### Configuration
 If your container relies on configuration files generate them on the fly. Also ensure that you use sensible defaults for parameters which enables simple zero-config deployments.
 
