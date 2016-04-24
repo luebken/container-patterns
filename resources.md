@@ -39,6 +39,9 @@
   https://github.com/progrium/entrykit
   Entrypoint tools for elegant, programmable containers
 
+* Autopilot Pattern
+  http://autopilotpattern.io/ & https://github.com/joyent/containerpilot
+  A pattern and implementation by Joyent to make containers auto discoveriable and configurable.
 
 
 TODO / TOSORT
