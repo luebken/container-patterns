@@ -1,6 +1,8 @@
 # Module container
 
-Developing container based applications is still a fairly new topic. Even more are general ideas such as using containers as modules to architect applictions. To assit further discussions this document tries to gather current best practices and tries to suggests some new ideas to the community. Most of these ideas should be container runtime agnostic but still practical with relevant and concrete examples.
+Developing container based applications is still a fairly new topic. Even more are general ideas such as using containers as modules to architect applictions. To assit further discussions this document tries to gather current best practices and tries to suggests some new ideas to the community. 
+
+These ideas should be container runtime and orchestration engine agnostic. And at the same time still practical with relevant and concrete examples.
 
 Many of these ideas are formalised in the [Open Containers Spec](https://github.com/opencontainers/specs) but we want to give guidance for tools in use today. We will try to link to Docker, rkt and OCI examples where applicable.
 
