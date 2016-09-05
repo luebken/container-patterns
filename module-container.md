@@ -31,6 +31,7 @@ There is no canonical definition of a "module container". Instead we gather a se
 1. [Linux process](#1-linux-process)
 2. [Container API](#2-container-api)
 3. [Explicit interfaces](#3-explicit-interfaces)
+3. [Self-Describing](#3-self-describing)
 4. [Disposable](#4-disposable)
 5. [Immutable](#5-immutable)
 6. [Self-Contained](#6-self-contained)
@@ -162,7 +163,7 @@ A major part of running containers in a cluster is checking whether they are hea
 * A simple tool for inserting environment variables in templates is https://github.com/andreasjansson/envtpl or [envsubst from gettext](https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html)
 
 
-### 3. Descriptive
+### 3. Self-Describing
 
 A good module has an explicit, or as wikipedia says [well defined](https://en.wikipedia.org/wiki/Modular_programming#Key_aspects) interface. So with all the ways declaring an API for our container we also need a way to document this. Unfortunatel, as this is not always possible within the declaration; we want to expand on the definition and use labels to document our API.
 
