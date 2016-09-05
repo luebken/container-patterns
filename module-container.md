@@ -117,9 +117,9 @@ Luckily CLI arguments are a well defined topic so we refer to existing standards
 * Also be aware of [the PID 1 zombie reaping problem](https://blog.phusion.nl/2015/01/20/docker-and-the-pid-1-zombie-reaping-problem/) in Docker
 
 
-### 2. API
+### 2. Container API
 
-Although our container is foremost a Linux process it is also contained in it's own environment. This gives our "module container" more capabilities in defining APIs to it's environment and clients. These are _Use environment variables_, _Declare available ports_, _Volume mounts_ and _Hooks_.
+Although our container is foremost a Linux process it is also embedded in some kind of container runtime. This gives our "module container" more capabilities in defining APIs to it's environment and clients. These are _Use environment variables_, _Declare available ports_, _Volume mounts_ and _Hooks_.
 
 #### Use environment variables
 
