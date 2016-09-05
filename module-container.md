@@ -13,6 +13,7 @@ Many of these ideas are formalised in the [Open Containers Spec](https://github.
 The term "module container" builds upon the term "application container" coined by Docker. An application container focuses on running a single process in contrast to multiple processes per container. If the application consists of multiple processes they may be spread out to different containers. A module container refines an application container and focuses on being a modular isolated building block in the provision of a service. In addition it suggests an even smaller level of granularity.
 
 [//]: # (TODO mention system container)
+
 ## Related work
 
 In this field there is much prior and contemporary art:
