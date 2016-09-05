@@ -30,7 +30,6 @@ There is no canonical definition of a "module container". Instead we gather a se
 
 1. [Linux process](#1-linux-process)
 2. [Container API](#2-container-api)
-3. [Explicit interfaces](#3-explicit-interfaces)
 3. [Self-Describing](#3-self-describing)
 4. [Disposable](#4-disposable)
 5. [Immutable](#5-immutable)
