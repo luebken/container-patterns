@@ -1,10 +1,27 @@
 # Container Patterns
 
-Patterns around building applications with containers.
+Building applications with container technologies like [Docker](https://www.docker.com/) or [rkt](https://github.com/coreos/rkt) allows for new architectures and decisions in application design. In this document we would like to start a discussion around this and share experiences.
 
-Currently WIP please see the [V1 branch](https://github.com/luebken/container-patterns/tree/v1) especially the section around [module container](https://github.com/luebken/container-patterns/blob/v1/module-container.md)
+### Context
 
-Also https://github.com/luebken/container-api a POC on leveraging Docker labels to describe the API of an container.
+We are mainly talking about **cloud aware applications**. Or as the [cloud native foundations](https://cncf.io/about/our-mission) summarises: modern distributed systems which will be  _container packed_, _dynamically managed_ and _microservices oriented_.
 
+The goal is to find and describe general applicable patterns for building applications of this type. The patterns should be container runtime agnostic but with concrete examples.
 
-<iframe src="//www.slideshare.net/slideshow/embed_code/key/yhebgdpZbJHgpf" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/luebken/container-patterns" title="Container Patterns" target="_blank">Container Patterns</a> </strong> from <strong><a target="_blank" href="//www.slideshare.net/luebken">Matthias Luebken</a></strong> </div>
+We currently assume that using several containers is a good idea. The reasons for this are manifold and won't be discussed in detail here. But just a couple of reasons by way of example: “Independent releasable”, "Reuse of domain / infrastructure components”, “Separate processing types”, “Different loads”, “POCs isolation”, "Composability", “Use different languages / versions / libraries”, “Enforce architectural boundaries”, “Robustness / crash isolation” or simply “Different teams”.
+
+### State
+
+The current version is a discussion starter mainly taken from various feedback from the talks [@luebken](https://github.com/luebken) and [@denderello](https://github.com/denderello) have given. The latest version of the talk is from [QCon London (March 2016)](http://www.slideshare.net/luebken/container-patterns). For the current state of this document please refer it's	Github [issues](https://github.com/luebken/container-patterns/issues).
+
+### Feedback
+
+Currently most of the discussions are done in other channels. The first idea to consolidate this with [issues](https://github.com/luebken/container-patterns/issues). But feel free to suggest other channels.
+
+## Overview Content
+We currently see two major topics:
+
+* [Module Container](module-container.md)
+* [Composite Patterns](composite-patterns.md) (WIP)
+
+In addition we are collecting links which we found valuable at [resources.md](resources.md)
