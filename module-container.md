@@ -29,9 +29,9 @@ The folks from [Deis](http://deis.io/) have coined the term [cluster aware image
 There is no canonical definition of a "module container". Instead we gather a set of guiding properties and associated best practices:
 
 1. [Linux process](1_linux_process.md)
-2. [Container API](#2-container-api)
-3. [Self-Describing](#3-self-describing)
-4. [Disposable](#4-disposable)
-5. [Immutable](#5-immutable)
-6. [Self-Contained](#6-self-contained)
-7. [Small](#small)
+2. [Container API](2_container-api.md)
+3. [Self-Describing](3_self-describing.md)
+4. [Disposable](4_disposable.md)
+5. [Immutable](5_immutable.md)
+6. [Self-Contained](6_self-contained.md)
+7. [Small](7_small.md)
