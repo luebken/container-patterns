@@ -28,7 +28,7 @@ The folks from [Deis](http://deis.io/) have coined the term [cluster aware image
 
 There is no canonical definition of a "module container". Instead we gather a set of guiding properties and associated best practices:
 
-1. [Linux process](#1-linux-process)
+1. [Linux process](1_linux_process.md)
 2. [Container API](#2-container-api)
 3. [Self-Describing](#3-self-describing)
 4. [Disposable](#4-disposable)
