@@ -1,7 +1,6 @@
 # Summary
 
 * [Introduction](README.md)
-   * Composite Patterns
 * [Module Container](module-container.md)
    * [Linux Process](1_linux_process.md)
    * [Container API](2_container_api.md)
@@ -10,4 +9,6 @@
    * [Immutable](5_immutable.md)
    * [Self-Contained](6_self-contained.md)
    * [Small](7_small.md)
+* Composite Patterns
+* Resources
 
