@@ -4,7 +4,7 @@ Developing container based applications is still a fairly new topic. Even more a
 
 These ideas should be container runtime and orchestration engine agnostic. And at the same time still practical with relevant and concrete examples.
 
-Many of these ideas are formalised in the [Open Containers Spec](https://github.com/opencontainers/specs) but we want to give guidance for tools in use today. We will try to link to Docker, rkt and OCI examples where applicable.
+Many of these ideas are formalized in the [Open Containers Spec](https://github.com/opencontainers/specs) but we want to give guidance for tools in use today. We will try to link to Docker, rkt and OCI examples where applicable.
 
 > Note: This document is highly Work-In-Progress. Please get involved. Comment discuss and add your own ideas.  
 
