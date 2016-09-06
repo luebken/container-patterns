@@ -6,5 +6,4 @@
    * [Container API](2_container_api.md)
    * [Self-Describing](3_self-describing.md)
    * [Disposable](4_disposable.md)
-   * Disposable
 
