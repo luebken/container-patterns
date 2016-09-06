@@ -8,5 +8,5 @@
    * [Disposable](4_disposable.md)
    * [Immutable](5_immutable.md)
    * [Self-Contained](6_self-contained.md)
-   * Small
+   * [Small](7_small.md)
 
