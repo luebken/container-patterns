@@ -7,4 +7,5 @@
    * [Self-Describing](3_self-describing.md)
    * [Disposable](4_disposable.md)
    * [Immutable](5_immutable.md)
+   * Self-Contained
 
