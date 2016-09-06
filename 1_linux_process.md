@@ -2,7 +2,7 @@
 
 Before we try to introduce too many new ideas, we should acknowledge the fact that a container is foremost a Linux process. Therefore we should apply common standards and best practices for writing Unix tools, that now happen to be running in containers. These are _React to signals_, _Use standard streams_, _Handle arguments_:
 
-#### React to signals
+## React to signals
 A container should react to the [signals](https://en.wikipedia.org/wiki/Unix_signal) which are sent to it. So our applications in the container should run in the foreground and catch signals and react appropriately. 
 
 Important signals to catch are:
@@ -26,7 +26,7 @@ https://github.com/luebken/currentweather/blob/master/server.js#L49
 **Docker best practices:**
 * Use the [exec form](https://docs.docker.com/engine/reference/builder/#run) to start you processes. Since it doesn't invoke a shell.
 
-#### Return exit codes
+## Return exit codes
 When a process exits it should return a proper exit code. The same is true for our container. This gives us a better overview of the context and the scheduler / init process better means of scheduling. E.g. in Kubernetes you can define that only failed containers [should be restarted](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/pod-states.md#restartpolicy).
 
 We generally just differ between the exit code `0` as a successful termination and something `>0` as a failure. But other exit codes are also conceivable. For some inspiration, check out [glibc](https://github.molgen.mpg.de/git-mirror/glibc/blob/master/misc/sysexits.h) or [bash](http://tldp.org/LDP/abs/html/exitcodes.html).
@@ -39,7 +39,7 @@ process.exit(0);
 ```
 https://github.com/luebken/currentweather/blob/master/server.js#L52
 
-#### Use standard streams
+## Use standard streams
 
 Linux processes use standard streams as a means of communication. There are `stdin`: standard input, `stdout`: standard output and `stderr` standard error:
 
@@ -58,7 +58,7 @@ Linux processes use standard streams as a means of communication. There are `std
   ```
   https://github.com/nginxinc/docker-nginx/blob/master/stable/jessie/Dockerfile#L14
 
-#### Handle arguments
+## Handle arguments
 
 Arguments are a straightforward way to configure and send options to a container. We propose that you should handle these in a prescribed manner. And get your team to discuss and agree on a standard.
 
@@ -69,7 +69,7 @@ Luckily CLI arguments are a well defined topic so we refer to existing standards
 * Libcs [Program Argument Syntax Conventions](http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html)
 
 
-#### Further reading on Linux process:
+## Further reading on Linux process:
 
 * The [man page](http://man7.org/linux/man-pages/man7/signal.7.html) contains a good overview of signals.
 * [What makes an awesome CLI Application](https://pragprog.com/magazines/2012-05/what-makes-an-awesome-commandline-application) gives some inspiration.
