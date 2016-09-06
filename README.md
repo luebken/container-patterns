@@ -19,9 +19,4 @@ The current version is a discussion starter mainly taken from various feedback f
 Currently most of the discussions are done in other channels. The first idea to consolidate this with [issues](https://github.com/luebken/container-patterns/issues). But feel free to suggest other channels.
 
 ## Overview Content
-We currently see two major topics:
-
-* [Module Container](module-container.md)
-* [Composite Patterns](composite-patterns.md) (WIP)
-
-In addition we are collecting links which we found valuable at [resources.md](resources.md)
+!INCLUDE "SUMMARY.md"
