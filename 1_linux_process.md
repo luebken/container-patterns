@@ -1,4 +1,4 @@
-# Linux Process
+# 1. Linux Process
 
 Before we try to introduce too many new ideas, we should acknowledge the fact that a container is foremost a Linux process. Therefore we should apply common standards and best practices for writing Unix tools, that now happen to be running in containers. These are _React to signals_, _Use standard streams_, _Handle arguments_:
 
