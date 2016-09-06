@@ -10,5 +10,5 @@
    * [Self-Contained](6_self-contained.md)
    * [Small](7_small.md)
 * [Composite Patterns](composite-patterns.md)
-* Resources
+* [Resources](resources.md)
 
