@@ -12,7 +12,7 @@ We currently assume that using several containers is a good idea. The reasons fo
 
 ### State
 
-The current version is a discussion starter mainly taken from various feedback from the talks [@luebken](https://github.com/luebken) and [@denderello](https://github.com/denderello) have given. The latest version of the talk is from [QCon London (March 2016)](http://www.slideshare.net/luebken/container-patterns). For the current state of this document please refer it's Github [issues](https://github.com/luebken/container-patterns/issues).
+The current version is a discussion starter mainly taken from various feedback from the talks [@luebken](https://github.com/luebken) and [@denderello](https://github.com/denderello) have given. The latest version of the talk is from [QCon London (March 2016)](https://www.infoq.com/presentations/patterns-applications-containers). For the current state of this document please refer it's Github [issues](https://github.com/luebken/container-patterns/issues).
 
 ### Feedback
 
