@@ -41,3 +41,4 @@ A major part of running containers in a cluster is checking whether they are hea
 * "Parameterized Docker Containers": http://blog.james-carr.org/2013/09/04/parameterized-docker-containers
 * A dynamic configuration file generation tool: https://github.com/markround/tiller
 * A simple tool for inserting environment variables in templates is https://github.com/andreasjansson/envtpl or [envsubst from gettext](https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html)
+* Kelsey Hightower - healthz: Stop reverse engineering applications and start monitoring from the inside https://vimeo.com/173610242 & https://github.com/kelseyhightower/app-healthz
